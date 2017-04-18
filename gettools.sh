@@ -6,6 +6,7 @@ passwd
 # ofc
 apt-get update
 apt-get -y upgrade
+pip install --upgrade pip
 
 #32 bit headers asdfasdfasfd WHY ISNT THIS IN BY DEFAULT?!!?
 apt-get -y install lib32stdc++6 libc6-i386
@@ -240,6 +241,37 @@ wget https://download.sublimetext.com/sublime-text_build-3126_amd64.deb
 dpkg --install sublime-text_build-3126_amd64.deb
 rm sublime-text_build-3126_amd64.deb
 cd ~/
+
+# privesc
+mkdir Privesc
+cd Privesc
+mkdir Linux
+cd Linux
+wget https://www.securitysift.com/download/linuxprivchecker.py
+git clone https://github.com/rebootuser/LinEnum.git
+git clone https://github.com/PenturaLabs/Linux_Exploit_Suggester.git
+git clone https://github.com/pentestmonkey/unix-privesc-check.git
+cd ..
+mkdir Windows
+cd Windows
+git clone https://github.com/pentestmonkey/windows-privesc-check.git
+git clone https://github.com/GDSSecurity/Windows-Exploit-Suggester.git
+cd ~/
+
+# sublist3r
+cd /opt/
+git clone https://github.com/aboul3la/Sublist3r.git
+ln -s /opt/Sublist3r/sublist3r.py /usr/local/bin/sublist3r
+chmod +x /opt/Sublist3r/sublist3r.py
+cd ~/
+
+# RSACtfTool (needs libnum and gmpy)
+pip install gmpy
+cd /opt/
+git clone git clone https://github.com/hellman/libnum.git
+python libnum/setup.py install
+git clone https://github.com/Ganapati/RsaCtfTool.git
+ln -s /opt/RsaCtfTool/RsaCtfTool.py /usr/local/bin/rsactftool 
 
 # apt-get autogoodcleanremove
 apt-get -y autoremove

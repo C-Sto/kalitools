@@ -271,7 +271,22 @@ cd /opt/
 git clone git clone https://github.com/hellman/libnum.git
 python libnum/setup.py install
 git clone https://github.com/Ganapati/RsaCtfTool.git
-ln -s /opt/RsaCtfTool/RsaCtfTool.py /usr/local/bin/rsactftool 
+ln -s /opt/RsaCtfTool/RsaCtfTool.py /usr/local/bin/rsactftool
+cd ~/
+
+# gittools
+cd /opt/
+git clone https://github.com/internetwache/GitTools.git
+ln -s /opt/GitTools/Dumper/gitdumper.sh /usr/local/bin/gitdumper
+ln -s /opt/GitTools/Extractor/extractor.sh /usr/local/bin/gitextractor
+ln -s /opt/GitTools/Finder/gitfinder.sh /usr/local/bin/gitfinder
+cd ~/
+
+# do the right extraction (dtrx)
+apt-get -y install dtrx
+
+# node
+apt-get -y install npm nodejs
 
 # apt-get autogoodcleanremove
 apt-get -y autoremove

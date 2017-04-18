@@ -288,6 +288,12 @@ apt-get -y install dtrx
 # node
 apt-get -y install npm nodejs
 
+# vlan hopper (frogger)
+cd /opt/
+git clone https://github.com/nccgroup/vlan-hopping.git
+chmod +x vlan-hopping/frogger.sh
+ln -s /opt/vlan-hopping/frogger.sh /usr/local/bin/frogger
+
 # apt-get autogoodcleanremove
 apt-get -y autoremove
 apt-get -y autoclean

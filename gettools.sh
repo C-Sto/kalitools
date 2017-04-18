@@ -207,8 +207,9 @@ apt-get -y install responder
 # sshuttle
 apt-get -y install sshuttle
 
-# zsteg errors?
-#gem install zsteg
+# zsteg (rake is magic fixer of the error..ok? ruby rules)
+gem install rake
+gem install zsteg
 
 # exiftool
 gem install exiftool

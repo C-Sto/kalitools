@@ -39,12 +39,14 @@ apt-get -y purge radare2
 apt-get -y install valac libvala-0.34-dev swig
 pip install r2pipe
 pip install --upgrade xdot
-cd ~/
+cd /opt
 git clone https://github.com/radare/radare2
 cd radare2
 sys/install.sh
 cd ~/
+
 #   valabind
+cd /opt/
 apt-get purge valabind
 git clone https://github.com/radare/valabind
 cd valabind
@@ -52,13 +54,13 @@ make
 make install PREFIX=/usr
 cd ~/
 #   r2 bindings
-git clone https://github.com/radare/radare2-bindings
-cd radare2-bindings
-./configure --prefix=/usr
-cd python
-make
-make install
-cd ~/
+#git clone https://github.com/radare/radare2-bindings
+#cd radare2-bindings
+#./configure --prefix=/usr
+#cd python
+#make
+#make install
+#cd ~/
 
 #autopsy
 apt-get -y install autopsy

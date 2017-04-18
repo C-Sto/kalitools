@@ -233,6 +233,13 @@ dpkg --install atom-amd64.deb
 rm atom-amd64.deb
 cd ~/
 
+# sublime (latest release is 2016, whatever)
+cd ~/Downloads
+wget https://download.sublimetext.com/sublime-text_build-3126_amd64.deb
+dpkg --install sublime-text_build-3126_amd64.deb
+rm sublime-text_build-3126_amd64.deb
+cd ~/
+
 # apt-get autogoodcleanremove
 apt-get -y autoremove
 apt-get -y autoclean

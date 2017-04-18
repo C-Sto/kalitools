@@ -236,3 +236,6 @@ cd ~/
 # apt-get autogoodcleanremove
 apt-get -y autoremove
 apt-get -y autoclean
+
+# reboot because yes
+reboot

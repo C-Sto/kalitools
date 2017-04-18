@@ -93,8 +93,8 @@ apt-get -y install cmatrix
 # apktool
 apt-get -y install apktool
 
-# quemu
-apt-get -y install qemu
+# qemu
+apt-get -y install qemu qemu-kvm qemu-system qemu-system-arm qemu-system-common qemu-system-mips qemu-system-ppc qemu-system-sparc qemu-system-x86 qemu-utils
 
 # die
 mkdir /opt/die
@@ -103,7 +103,7 @@ tar -xf /opt/die/DIE1.01.tar.gz -C /opt/die/
 ln -s /opt/die/lin64/die /usr/local/bin/
 
 # preeny
-apt-get install libini-config-dev
+apt-get -y install libini-config-dev
 cd ~/
 git clone https://github.com/zardus/preeny.git
 cd preeny
@@ -120,7 +120,7 @@ apt-get -y install bro
 apt-get -y install bless
 
 # empire
-apt-get install empire
+apt-get -y install empire
 
 # hob0rules
 cd ~/

@@ -294,6 +294,13 @@ git clone https://github.com/nccgroup/vlan-hopping.git
 chmod +x vlan-hopping/frogger.sh
 ln -s /opt/vlan-hopping/frogger.sh /usr/local/bin/frogger
 
+# fastcoll
+cd /opt/
+git clone https://github.com/upbit/clone-fastcoll.git
+cd clone-fastcoll
+make
+ln -s /opt/clone-fastcoll/fastcoll /usr/local/bin/fastcoll
+
 # apt-get autogoodcleanremove
 apt-get -y autoremove
 apt-get -y autoclean

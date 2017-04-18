@@ -10,6 +10,9 @@ apt-get -y upgrade
 #32 bit headers asdfasdfasfd WHY ISNT THIS IN BY DEFAULT?!!?
 apt-get -y install lib32stdc++6 libc6-i386
 
+# exfat for usb's
+apt-get -y install exfat-fuse
+
 # pwntools
 apt-get -y install python2.7 python-pip python-dev git libssl-dev libffi-dev build-essential
 pip install --upgrade pip
@@ -203,6 +206,20 @@ apt-get -y install sshuttle
 
 # exiftool
 gem install exiftool
+
+# golang
+apt-get -y install golang
+cd ~/
+mkdir golang
+export GOPATH=~/golang/
+export PATH=$PATH:$GOPATH/bin
+echo "export GOPATH=~/golang/" >> .bashrc
+echo "export PATH=$PATH:$GOPATH/bin" >> .bashrc
+
+# glugger
+cd ~/
+go get github.com/zxsecurity/glugger
+
 
 # apt-get autogoodcleanremove
 apt-get -y autoremove

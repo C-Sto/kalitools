@@ -13,6 +13,12 @@ apt-get -y install lib32stdc++6 libc6-i386
 # exfat for usb's
 apt-get -y install exfat-fuse
 
+# ntpdate because VM's + time is hard
+apt-get -y install ntpdate
+
+# speaking of VM's, vmware tools pls
+apt-get -y install open-vm-tools-desktop
+
 # pwntools
 apt-get -y install python2.7 python-pip python-dev git libssl-dev libffi-dev build-essential
 pip install --upgrade pip
@@ -220,6 +226,12 @@ echo "export PATH=$PATH:$GOPATH/bin" >> .bashrc
 cd ~/
 go get github.com/zxsecurity/glugger
 
+# atom
+cd ~/Downloads
+wget https://github.com/atom/atom/releases/download/$(curl https://github.com/atom/atom/releases/latest | cut -d / -f 8 - | cut -d \" -f 1 -)/atom-amd64.deb
+dpkg --install atom-amd64.deb
+rm atom-amd64.deb
+cd ~/
 
 # apt-get autogoodcleanremove
 apt-get -y autoremove

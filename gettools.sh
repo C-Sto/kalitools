@@ -16,6 +16,7 @@ apt-get -y install exfat-fuse
 
 # ntpdate because VM's + time is hard
 apt-get -y install ntpdate
+ntpdate -s pool.ntp.org
 
 # speaking of VM's, vmware tools pls
 apt-get -y install open-vm-tools-desktop

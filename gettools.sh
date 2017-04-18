@@ -300,6 +300,18 @@ git clone https://github.com/upbit/clone-fastcoll.git
 cd clone-fastcoll
 make
 ln -s /opt/clone-fastcoll/fastcoll /usr/local/bin/fastcoll
+cd ~/
+
+# figlet
+apt-get -y install figlet
+
+# dnscat2
+cd /opt/
+git clone https://github.com/iagox86/dnscat2.git
+cd dnscat2/client/
+make
+ln -s $(pwd)/dnscat /usr/local/bin/dnscat
+cd ~/
 
 # apt-get autogoodcleanremove
 apt-get -y autoremove

@@ -6,6 +6,7 @@ passwd
 # ofc
 apt-get update
 apt-get -y upgrade
+apt --fix-broken install
 pip install --upgrade pip
 
 #32 bit headers asdfasdfasfd WHY ISNT THIS IN BY DEFAULT?!!?
@@ -321,6 +322,19 @@ pip install factordb-pycli
 
 # tcpxtract
 apt-get install tcpxtract
+
+# foresight (rng prediction)
+cd /opt/
+git clone https://github.com/ALSchwalm/foresight.git
+cd foresight
+python setup.py install
+cd ~/
+
+# sysinternals
+cd /usr/share/windows-binaries
+wget https://download.sysinternals.com/files/SysinternalsSuite.zip
+dtrx -n SysinternalsSuite.zip
+rm SysinternalsSuite.zip
 
 # apt-get autogoodcleanremove
 apt-get -y autoremove

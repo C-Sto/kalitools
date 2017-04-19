@@ -124,7 +124,8 @@ make
 cd ~/
 
 # thefuck
-apt-get -y install thefuck
+apt-get -y install python3-dev python3-pip
+pip install --user thefuck
 
 # bro
 apt-get -y install bro
@@ -315,6 +316,9 @@ cd dnscat2/client/
 make
 ln -s $(pwd)/dnscat /usr/local/bin/dnscat
 cd ~/
+
+# factordb
+pip install factordb-pycli
 
 # apt-get autogoodcleanremove
 apt-get -y autoremove

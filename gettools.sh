@@ -124,7 +124,8 @@ make
 cd ~/
 
 # thefuck
-apt-get -y install thefuck
+apt-get -y install python3-dev python3-pip
+pip install --user thefuck
 
 # bro
 apt-get -y install bro

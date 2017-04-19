@@ -317,6 +317,9 @@ make
 ln -s $(pwd)/dnscat /usr/local/bin/dnscat
 cd ~/
 
+# factordb
+pip install factordb-pycli
+
 # apt-get autogoodcleanremove
 apt-get -y autoremove
 apt-get -y autoclean

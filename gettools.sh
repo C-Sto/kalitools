@@ -88,7 +88,7 @@ apt-get -y install virtualenv
 #wget https://droidbox.googlecode.com/files/DroidBox411RC.tar.gz
 
 # jadx
-cd ~/
+cd /opt
 git clone https://github.com/skylot/jadx.git
 cd jadx
 ./gradlew dist
@@ -124,8 +124,7 @@ make
 cd ~/
 
 # thefuck
-apt-get -y install python3-dev python3-pip
-pip install --user thefuck
+apt-get -y install thefuck
 
 # bro
 apt-get -y install bro
@@ -316,9 +315,6 @@ cd dnscat2/client/
 make
 ln -s $(pwd)/dnscat /usr/local/bin/dnscat
 cd ~/
-
-# factordb
-pip install factordb-pycli
 
 # apt-get autogoodcleanremove
 apt-get -y autoremove

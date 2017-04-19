@@ -164,9 +164,6 @@ apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E8
 echo 'deb https://apt.dockerproject.org/repo debian-wheezy main' > /etc/apt/sources.list.d/docker.list && apt-get update
 apt-get -y install docker-engine docker && service docker start
 
-# vbox
-apt-get -y install virtualbox
-
 # voltron
 apt-get -y install voltron
 
@@ -319,6 +316,11 @@ cd ~/
 
 # factordb
 pip install factordb-pycli
+
+# 1
+
+# tcpxtract
+apt-get install tcpxtract
 
 # apt-get autogoodcleanremove
 apt-get -y autoremove

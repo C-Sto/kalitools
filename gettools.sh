@@ -215,7 +215,7 @@ gem install rake
 gem install zsteg
 
 # exiftool
-gem install exiftool
+apt install exiftool
 
 # golang
 apt-get -y install golang
@@ -335,6 +335,7 @@ cd /usr/share/windows-binaries
 wget https://download.sysinternals.com/files/SysinternalsSuite.zip
 dtrx -n SysinternalsSuite.zip
 rm SysinternalsSuite.zip
+
 
 # apt-get autogoodcleanremove
 apt-get -y autoremove

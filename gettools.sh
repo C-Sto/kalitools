@@ -94,15 +94,14 @@ pip -q install --upgrade pwntools >> installLog.log || echo -e "${RED}[!]${RESET
 #gdb-peda
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing gdb-peda"
 cd /opt/
-git clone -q https://github.com/longld/peda.git >> installLog.log
-echo "source /opt/peda/peda.py" >> ~/.gdbinit
+git clone -q https://github.com/longld/peda.git >> installLog.log && echo "source /opt/peda/peda.py" >> ~/.gdbinit || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
 
 # wireshark sux
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Removing, then installing wireshark again, to avoid segfault things"
 apt -qq -y purge wireshark-common >> installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing wireshark again.."
-apt-get -qq -y install wireshark >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing wireshark again.. (requires input)"
+apt-get -qq -y install wireshark || echo -e "${RED}[!]${RESET} Install error!"
 
 # get a better r2 idk if it works? https://securityblog.gr/3791/install-latest-radare2-on-kali/
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Getting a better r2"

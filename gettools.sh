@@ -453,13 +453,16 @@ cd ~/
 
 # sage
 # we don't want to re-install if it's already installed, 1.2gb download is kinda brutal
-if []
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing sage... this may take a while!"
-wget -q --show-progress http://mirror.aarnet.edu.au/pub/sage/linux/64bit/sage-7.6-Debian_GNU_Linux_8-x86_64.tar.bz2
-tar jxf sage-7.6-Debian_GNU_Linux_8-x86_64.tar.bz2
-mv SageMath/ /opt/
-rm sage*
-ln -s /opt/SageMath/sage /usr/local/bin/sage
+if [ -e /usr/usr/local/bin/sage]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} Sage installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing sage... this may take a while!"
+  wget -q --show-progress http://mirror.aarnet.edu.au/pub/sage/linux/64bit/sage-7.6-Debian_GNU_Linux_8-x86_64.tar.bz2
+  tar jxf sage-7.6-Debian_GNU_Linux_8-x86_64.tar.bz2
+  mv SageMath/ /opt/
+  rm sage*
+  ln -s /opt/SageMath/sage /usr/local/bin/sage
+fi
 
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Upgrading any leftovers.."
 apt-get -qq -y upgrade || echo -e "${RED}[!]${RESET} Upgrade error!"

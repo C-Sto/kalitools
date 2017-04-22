@@ -74,7 +74,7 @@ apt -qq -y purge wireshark-common >> installLog.log || echo -e "${RED}[!]${RESET
 # atom
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing atom (the best text editor)"
 cd ~/Downloads
-apt-get -qq -y install gvfs-bin
+apt-get -qq -y install gvfs-bin >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 wget -q --show-progress https://github.com/atom/atom/releases/download/$(curl https://github.com/atom/atom/releases/latest | cut -d / -f 8 - | cut -d \" -f 1 -)/atom-amd64.deb
 dpkg --install atom-amd64.deb >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 rm atom-amd64.deb
@@ -119,7 +119,8 @@ pip -q install --upgrade xdot >> installLog.log || echo -e "${RED}[!]${RESET} In
 cd /opt
 git clone -q https://github.com/radare/radare2
 cd radare2
-sys/install.sh >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+# &> directs _all_ output into the log, no errors will show (tons of build stuff is spewed out, so this is good to keep it clean)
+sys/install.sh &> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
 #   valabind
 cd /opt/

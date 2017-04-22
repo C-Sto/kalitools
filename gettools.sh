@@ -62,7 +62,7 @@ HASH=
 
 # ofc
 echo -e "${GREEN}[+]${RESET} Apt updating, make sure nothing odd is in the output if custom mirrors are being used"
-apt-get update >> installLog.log || echo -e "${RED}[!]${RESET} apt update error!"
+apt-get update || echo -e "${RED}[!]${RESET} apt update error!"
 # hmm
 #apt --fix-broken install
 echo -e "${GREEN}[+]${RESET} Upgrading pip"
@@ -93,7 +93,9 @@ pip install --upgrade pwntools >> installLog.log || echo -e "${RED}[!]${RESET} I
 
 #gdb-peda
 echo -e "${GREEN}[+]${RESET} Installing gdb-peda"
-apt-get -qq -y install gdb-peda >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+cd /opt/
+git clone https://github.com/longld/peda.git
+echo "source /opt/peda/peda.py" >> ~/.gdbinit
 
 # wireshark sux
 echo -e "${GREEN}[+]${RESET} Removing, then installing wireshark again, to avoid segfault things"

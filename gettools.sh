@@ -74,7 +74,7 @@ apt-get -qq -y install lib32stdc++6 libc6-i386 || echo -e "${RED}[!]${RESET} Ins
 
 # exfat for usb's
 echo -e "${GREEN}[+]${RESET} Installing exfat-fuse"
-apt-get -qq -y install exfat-fuse >> installLog.log > installLog.log >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+apt-get -qq -y install exfat-fuse >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # ntpdate because VM's + time is hard
 echo -e "${GREEN}[+]${RESET} Installing ntp things"

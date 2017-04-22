@@ -94,8 +94,9 @@ pip install --upgrade pwntools >> installLog.log || echo -e "${RED}[!]${RESET} I
 #gdb-peda
 echo -e "${GREEN}[+]${RESET} Installing gdb-peda"
 cd /opt/
-git clone https://github.com/longld/peda.git
+git clone https://github.com/longld/peda.git >> installLog.log
 echo "source /opt/peda/peda.py" >> ~/.gdbinit
+cd ~/
 
 # wireshark sux
 echo -e "${GREEN}[+]${RESET} Removing, then installing wireshark again, to avoid segfault things"

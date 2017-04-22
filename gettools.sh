@@ -339,7 +339,7 @@ go get github.com/zxsecurity/glugger >> installLog.log || echo -e "${RED}[!]${RE
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing atom (the best text editor)"
 cd ~/Downloads
 apt-get -qq -y install gvfs-bin >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-wget -q --show-progress https://github.com/atom/atom/releases/download/$(curl https://github.com/atom/atom/releases/latest | cut -d / -f 8 - | cut -d \" -f 1 -)/atom-amd64.deb
+wget -q --show-progress https://github.com/atom/atom/releases/download/$(curl -s https://github.com/atom/atom/releases/latest | cut -d / -f 8 - | cut -d \" -f 1 -)/atom-amd64.deb
 dpkg --install atom-amd64.deb >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 rm atom-amd64.deb
 cd ~/

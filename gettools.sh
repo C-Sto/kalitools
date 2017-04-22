@@ -460,14 +460,18 @@ cd /usr/share/windows-binaries
 wget -q --show-progress https://download.sysinternals.com/files/SysinternalsSuite.zip
 dtrx -n SysinternalsSuite.zip
 rm SysinternalsSuite.zip
+cd ~/
 
 # sage
 echo -e "${GREEN}[+]${RESET} Installing sage... this may take a while!"
 wget -q --show-progress http://mirror.aarnet.edu.au/pub/sage/linux/64bit/sage-7.6-Debian_GNU_Linux_8-x86_64.tar.bz2
-dtrx -n -q sage-7*
+tar jxf sage-7.6-Debian_GNU_Linux_8-x86_64.tar.bz2
+mv SageMath/ /opt/
+rm sage*
+ln -s /opt/SageMath/sage /usr/local/bin/sage
 
 echo -e "${GREEN}[+]${RESET} Upgrading any leftovers.."
-apt-get -qq -y upgrade
+apt-get -qq -y upgrade || echo -e "${RED}[!]${RESET} Upgrade error!"
 
 # apt-get autogoodcleanremove
 echo -e "${GREEN}[+]${RESET} autoremoving, autocleaning, rebooting"

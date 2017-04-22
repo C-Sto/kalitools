@@ -253,7 +253,7 @@ echo 'deb http://http.debian.net/debian jessie-backports main' > /etc/apt/source
 apt-get -qq -y install apt-transport-https ca-certificates >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
 echo 'deb https://apt.dockerproject.org/repo debian-jessie main' > /etc/apt/sources.list.d/docker.list && apt-get -qq update
-apt-get -qq -y install docker-engine docker && service docker start >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+apt-get -qq -y install docker-engine docker >> ~/installLog.log && service docker start || echo -e "${RED}[!]${RESET} Install error!"
 
 # voltron
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing voltron"

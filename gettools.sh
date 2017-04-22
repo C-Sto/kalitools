@@ -69,7 +69,7 @@ pip -q install --upgrade pip >> ~/installLog.log || echo -e "${RED}[!]${RESET} p
 
 # wireshark sux
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Removing, then installing wireshark again, to avoid segfault things"
-apt -qq -y purge wireshark-common >> ~/installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
+apt-get -qq -y purge wireshark-common >> ~/installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
 
 #32 bit headers, snort and wireshark - interactive,  asdfasdfasfd WHY ISNT THIS IN BY DEFAULT?!!?
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing x86 support, snort, and wireshark (noisy, requires user input)"

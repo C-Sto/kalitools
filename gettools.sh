@@ -165,7 +165,7 @@ apt-get -qq -y install virtualenv >> installLog.log || echo -e "${RED}[!]${RESET
 # jadx
 echo -e "${GREEN}[+]${RESET} Installing jadx"
 cd /opt
-git clone https://github.com/skylot/jadx.git
+git clone https://github.com/skylot/jadx.git >> installLog.log
 cd jadx
 ./gradlew dist >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
@@ -203,7 +203,7 @@ ln -s /opt/die/lin64/die /usr/local/bin/
 echo -e "${GREEN}[+]${RESET} Installing preeny to homedir"
 apt-get -qq -y install libini-config-dev >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
-git clone https://github.com/zardus/preeny.git
+git clone https://github.com/zardus/preeny.git >> installLog.log
 cd preeny
 make >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
@@ -364,20 +364,20 @@ cd Privesc
 mkdir Linux
 cd Linux
 wget https://www.securitysift.com/download/linuxprivchecker.py
-git clone https://github.com/rebootuser/LinEnum.git
-git clone https://github.com/PenturaLabs/Linux_Exploit_Suggester.git
-git clone https://github.com/pentestmonkey/unix-privesc-check.git
+git clone https://github.com/rebootuser/LinEnum.git >> installLog.log
+git clone https://github.com/PenturaLabs/Linux_Exploit_Suggester.git >> installLog.log
+git clone https://github.com/pentestmonkey/unix-privesc-check.git >> installLog.log
 cd ..
 mkdir Windows
 cd Windows
-git clone https://github.com/pentestmonkey/windows-privesc-check.git
-git clone https://github.com/GDSSecurity/Windows-Exploit-Suggester.git
+git clone https://github.com/pentestmonkey/windows-privesc-check.git >> installLog.log
+git clone https://github.com/GDSSecurity/Windows-Exploit-Suggester.git >> installLog.log
 cd ~/
 
 # sublist3r
 echo -e "${GREEN}[+]${RESET} Installing sublist3r"
 cd /opt/
-git clone https://github.com/aboul3la/Sublist3r.git
+git clone https://github.com/aboul3la/Sublist3r.git >> installLog.log
 ln -s /opt/Sublist3r/sublist3r.py /usr/local/bin/sublist3r
 chmod +x /opt/Sublist3r/sublist3r.py
 cd ~/
@@ -386,16 +386,16 @@ cd ~/
 echo -e "${GREEN}[+]${RESET} Installing RSACtfTool"
 pip install gmpy >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 cd /opt/
-git clone git clone https://github.com/hellman/libnum.git
+git clone git clone https://github.com/hellman/libnum.git >> installLog.log
 python libnum/setup.py install >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-git clone https://github.com/Ganapati/RsaCtfTool.git
+git clone https://github.com/Ganapati/RsaCtfTool.git >> installLog.log
 ln -s /opt/RsaCtfTool/RsaCtfTool.py /usr/local/bin/rsactftool
 cd ~/
 
 # gittools
 echo -e "${GREEN}[+]${RESET} Installing gittools (gitdumper, gitextractor, gitfinder)"
 cd /opt/
-git clone https://github.com/internetwache/GitTools.git
+git clone https://github.com/internetwache/GitTools.git >> installLog.log
 ln -s /opt/GitTools/Dumper/gitdumper.sh /usr/local/bin/gitdumper
 ln -s /opt/GitTools/Extractor/extractor.sh /usr/local/bin/gitextractor
 ln -s /opt/GitTools/Finder/gitfinder.sh /usr/local/bin/gitfinder
@@ -412,14 +412,14 @@ apt-get -qq -y install npm nodejs >> installLog.log || echo -e "${RED}[!]${RESET
 # vlan hopper (frogger)
 echo -e "${GREEN}[+]${RESET} Installing frogger/vlan hopper (use as frogger)"
 cd /opt/
-git clone https://github.com/nccgroup/vlan-hopping.git
+git clone https://github.com/nccgroup/vlan-hopping.git >> installLog.log
 chmod +x vlan-hopping/frogger.sh
 ln -s /opt/vlan-hopping/frogger.sh /usr/local/bin/frogger
 
 # fastcoll
 echo -e "${GREEN}[+]${RESET} Installing fastcoll (the good one)"
 cd /opt/
-git clone https://github.com/upbit/clone-fastcoll.git
+git clone https://github.com/upbit/clone-fastcoll.git >> installLog.log
 cd clone-fastcoll
 make >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 ln -s /opt/clone-fastcoll/fastcoll /usr/local/bin/fastcoll
@@ -432,7 +432,7 @@ apt-get -qq -y install figlet >> installLog.log || echo -e "${RED}[!]${RESET} In
 # dnscat2
 echo -e "${GREEN}[+]${RESET} Installing dnscat2"
 cd /opt/
-git clone https://github.com/iagox86/dnscat2.git
+git clone https://github.com/iagox86/dnscat2.git >> installLog.log
 cd dnscat2/client/
 make >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 ln -s $(pwd)/dnscat /usr/local/bin/dnscat
@@ -449,7 +449,7 @@ apt-get install tcpxtract >> installLog.log || echo -e "${RED}[!]${RESET} Instal
 # foresight (rng prediction)
 echo -e "${GREEN}[+]${RESET} Installing foresight"
 cd /opt/
-git clone https://github.com/ALSchwalm/foresight.git
+git clone https://github.com/ALSchwalm/foresight.git >> installLog.log
 cd foresight
 python setup.py install >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/

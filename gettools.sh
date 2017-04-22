@@ -71,9 +71,9 @@ pip -q install --upgrade pip >> installLog.log || echo -e "${RED}[!]${RESET} pip
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Removing, then installing wireshark again, to avoid segfault things"
 apt -qq -y purge wireshark-common >> installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
 
-#32 bit headers and wireshark - interactive,  asdfasdfasfd WHY ISNT THIS IN BY DEFAULT?!!?
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing x86 support, and wireshark (noisy, requires user input)"
-apt-get -qq -y install lib32stdc++6 libc6-i386 wireshark || echo -e "${RED}[!]${RESET} Install error!"
+#32 bit headers, snort and wireshark - interactive,  asdfasdfasfd WHY ISNT THIS IN BY DEFAULT?!!?
+echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing x86 support, snort, and wireshark (noisy, requires user input)"
+apt-get -qq -y install lib32stdc++6 libc6-i386 wireshark snort || echo -e "${RED}[!]${RESET} Install error!"
 
 # exfat for usb's
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing exfat-fuse"
@@ -257,10 +257,6 @@ apt-get -qq -y install docker-engine docker && service docker start
 # voltron
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing voltron"
 apt-get -qq -y install voltron >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-
-# snort
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing snort"
-apt-get -qq -y install snort >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # yara
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing yara"

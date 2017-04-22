@@ -88,8 +88,8 @@ apt-get -qq -y install open-vm-tools-desktop >> installLog.log || echo -e "${RED
 # pwntools
 echo -e "${GREEN}[+]${RESET} Installing pwntools"
 apt-get -qq -y install python2.7 python-pip python-dev git libssl-dev libffi-dev build-essential >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-pip install --upgrade pip >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-pip install --upgrade pwntools >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+pip -q install --upgrade pip >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+pip -q install --upgrade pwntools >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 #gdb-peda
 echo -e "${GREEN}[+]${RESET} Installing gdb-peda"
@@ -109,8 +109,8 @@ echo -e "${GREEN}[+]${RESET} Getting a better r2"
 apt-get -qq -y purge radare2 >> installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
 # probably should work out how to make this automatically the most recent but whatever
 apt-get -qq -y install valac libvala-0.34-dev swig >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-pip install r2pipe >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-pip install --upgrade xdot >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+pip -q install r2pipe >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+pip -q install --upgrade xdot >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 cd /opt
 git clone -q https://github.com/radare/radare2
 cd radare2
@@ -121,16 +121,16 @@ cd /opt/
 apt-get purge valabind >> installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
 git clone -q https://github.com/radare/valabind
 cd valabind
-make >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-make install PREFIX=/usr >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+make -s >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+make -s install PREFIX=/usr >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
 #   r2 bindings
 git clone -q https://github.com/radare/radare2-bindings
 cd radare2-bindings
 ./configure --prefix=/usr >> installLog.log || echo -e "${RED}[!]${RESET} Config error!"
 cd python
-make >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-make install >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+make -s >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+make -s install >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
 
 #autopsy
@@ -206,13 +206,13 @@ apt-get -qq -y install libini-config-dev >> installLog.log || echo -e "${RED}[!]
 cd ~/
 git clone -q https://github.com/zardus/preeny.git >> installLog.log
 cd preeny
-make >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+make -s >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
 
 # thefuck
 echo -e "${GREEN}[+]${RESET} Installing thefuck"
 apt-get -qq -y install python3-dev python3-pip >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-pip install --user thefuck >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+pip -q install --user thefuck >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # bro
 echo -e "${GREEN}[+]${RESET} Installing bro"
@@ -325,7 +325,7 @@ gem install zsteg >> installLog.log || echo -e "${RED}[!]${RESET} Install error!
 
 # exiftool
 echo -e "${GREEN}[+]${RESET} Installing exiftool"
-apt install exiftool >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+apt-get -q -y install exiftool >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # golang
 echo -e "${GREEN}[+]${RESET} Installing golang, and setting up environment in homedir/golang"
@@ -385,7 +385,7 @@ cd ~/
 
 # RSACtfTool (needs libnum and gmpy)
 echo -e "${GREEN}[+]${RESET} Installing RSACtfTool"
-pip install gmpy >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+pip -q install gmpy >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 cd /opt/
 git clone -q https://github.com/hellman/libnum.git >> installLog.log
 python libnum/setup.py install >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
@@ -422,7 +422,7 @@ echo -e "${GREEN}[+]${RESET} Installing fastcoll (the good one)"
 cd /opt/
 git clone -q https://github.com/upbit/clone-fastcoll.git >> installLog.log
 cd clone-fastcoll
-make >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+make -s >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 ln -s /opt/clone-fastcoll/fastcoll /usr/local/bin/fastcoll
 cd ~/
 
@@ -435,7 +435,7 @@ echo -e "${GREEN}[+]${RESET} Installing dnscat2"
 cd /opt/
 git clone -q https://github.com/iagox86/dnscat2.git >> installLog.log
 cd dnscat2/client/
-make >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+make -s >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 ln -s $(pwd)/dnscat /usr/local/bin/dnscat
 cd ~/
 

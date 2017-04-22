@@ -337,6 +337,7 @@ go get github.com/zxsecurity/glugger >> installLog.log || echo -e "${RED}[!]${RE
 # atom
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing atom (the best text editor)"
 cd ~/Downloads
+apt-get -qq -y install gvfs-bin
 wget -q --show-progress https://github.com/atom/atom/releases/download/$(curl https://github.com/atom/atom/releases/latest | cut -d / -f 8 - | cut -d \" -f 1 -)/atom-amd64.deb
 dpkg --install atom-amd64.deb >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 rm atom-amd64.deb
@@ -456,6 +457,8 @@ rm SysinternalsSuite.zip
 cd ~/
 
 # sage
+# we don't want to re-install if it's already installed, 1.2gb download is kinda brutal
+if []
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing sage... this may take a while!"
 wget -q --show-progress http://mirror.aarnet.edu.au/pub/sage/linux/64bit/sage-7.6-Debian_GNU_Linux_8-x86_64.tar.bz2
 tar jxf sage-7.6-Debian_GNU_Linux_8-x86_64.tar.bz2
@@ -472,4 +475,4 @@ apt-get -qq -y autoremove
 apt-get -qq -y autoclean
 
 # reboot because yes
-reboot
+#reboot

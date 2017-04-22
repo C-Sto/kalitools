@@ -70,7 +70,7 @@ pip -q install --upgrade pip >> installLog.log || echo -e "${RED}[!]${RESET} pip
 
 #32 bit headers asdfasdfasfd WHY ISNT THIS IN BY DEFAULT?!!?
 echo -e "${GREEN}[+]${RESET} Installing x86 support"
-apt-get -qq -y install lib32stdc++6 libc6-i386 >> installLog.log|| echo -e "${RED}[!]${RESET} Install error!"
+apt-get -qq -y install lib32stdc++6 libc6-i386 >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # exfat for usb's
 echo -e "${GREEN}[+]${RESET} Installing exfat-fuse"
@@ -172,7 +172,7 @@ cd jadx
 # cyberchef (run with cyberchef command)
 echo -e "${GREEN}[+]${RESET} Installing cyberchef"
 mkdir /opt/cyberchef
-wget https://gchq.github.io/CyberChef/cyberchef.htm -O /opt/cyberchef/cyberchef.htm
+wget -q --show-progress https://gchq.github.io/CyberChef/cyberchef.htm -O /opt/cyberchef/cyberchef.htm
 echo '#!/bin/bash' > /usr/local/bin/cyberchef
 echo 'firefox /opt/cyberchef/cyberchef.htm' > /usr/local/bin/cyberchef
 chmod +x /usr/local/bin/cyberchef
@@ -195,7 +195,7 @@ qemu-system-sparc qemu-system-x86 qemu-utils \
 # die
 echo -e "${GREEN}[+]${RESET} Installing Detect it Easy (run as die)"
 mkdir /opt/die
-wget https://www.dropbox.com/s/7v49w3jiey9rrjm/DIE_1.01_lin64.tar.gz?dl=1 -O /opt/die/DIE1.01.tar.gz >> installLog.log || echo -e "${RED}[!]${RESET} Can't get DIE!"
+wget -q --show-progress https://www.dropbox.com/s/7v49w3jiey9rrjm/DIE_1.01_lin64.tar.gz?dl=1 -O /opt/die/DIE1.01.tar.gz || echo -e "${RED}[!]${RESET} Can't get DIE!"
 tar -xf /opt/die/DIE1.01.tar.gz -C /opt/die/
 ln -s /opt/die/lin64/die /usr/local/bin/
 
@@ -230,8 +230,8 @@ echo -e "${GREEN}[+]${RESET} Installing hob0rules"
 cd ~/
 mkdir hob0rules
 cd hob0rules
-wget https://raw.githubusercontent.com/praetorian-inc/Hob0Rules/master/d3adhob0.rule >> installLog.log || echo -e "${RED}[!]${RESET} Get error!"
-wget https://raw.githubusercontent.com/praetorian-inc/Hob0Rules/master/hob064.rule >> installLog.log || echo -e "${RED}[!]${RESET} Get error!"
+wget -q --show-progress https://raw.githubusercontent.com/praetorian-inc/Hob0Rules/master/d3adhob0.rule || echo -e "${RED}[!]${RESET} Get error!"
+wget -q --show-progress https://raw.githubusercontent.com/praetorian-inc/Hob0Rules/master/hob064.rule || echo -e "${RED}[!]${RESET} Get error!"
 cd ~/
 
 # magic wormhole
@@ -241,7 +241,7 @@ apt-get -qq -y install magic-wormhole >> installLog.log || echo -e "${RED}[!]${R
 # bloodhound
 echo -e "${GREEN}[+]${RESET} Installing bloodhound"
 apt-get -qq -y install apt-transport-https >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-wget -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add -
+wget -q --show-progress -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add -
 echo 'deb https://debian.neo4j.org/repo stable/' | sudo tee /etc/apt/sources.list.d/neo4j.list
 apt-get -qq update
 apt-get -qq -y install neo4j >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
@@ -344,7 +344,7 @@ go get github.com/zxsecurity/glugger >> installLog.log || echo -e "${RED}[!]${RE
 # atom
 echo -e "${GREEN}[+]${RESET} Installing atom (the best text editor)"
 cd ~/Downloads
-wget https://github.com/atom/atom/releases/download/$(curl https://github.com/atom/atom/releases/latest | cut -d / -f 8 - | cut -d \" -f 1 -)/atom-amd64.deb
+wget -q --show-progress https://github.com/atom/atom/releases/download/$(curl https://github.com/atom/atom/releases/latest | cut -d / -f 8 - | cut -d \" -f 1 -)/atom-amd64.deb
 dpkg --install atom-amd64.deb >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 rm atom-amd64.deb
 cd ~/
@@ -352,7 +352,7 @@ cd ~/
 # sublime (latest release is 2016, whatever)
 echo -e "${GREEN}[+]${RESET} Installing sublime (the inferior text editor)"
 cd ~/Downloads
-wget https://download.sublimetext.com/sublime-text_build-3126_amd64.deb
+wget -q --show-progress https://download.sublimetext.com/sublime-text_build-3126_amd64.deb
 dpkg --install sublime-text_build-3126_amd64.deb >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 rm sublime-text_build-3126_amd64.deb
 cd ~/
@@ -363,7 +363,7 @@ mkdir Privesc
 cd Privesc
 mkdir Linux
 cd Linux
-wget https://www.securitysift.com/download/linuxprivchecker.py
+wget -q --show-progress https://www.securitysift.com/download/linuxprivchecker.py
 git clone https://github.com/rebootuser/LinEnum.git >> installLog.log
 git clone https://github.com/PenturaLabs/Linux_Exploit_Suggester.git >> installLog.log
 git clone https://github.com/pentestmonkey/unix-privesc-check.git >> installLog.log
@@ -457,9 +457,14 @@ cd ~/
 # sysinternals
 echo -e "${GREEN}[+]${RESET} Getting sysinternals suite, storing with other windows binaries"
 cd /usr/share/windows-binaries
-wget https://download.sysinternals.com/files/SysinternalsSuite.zip
+wget -q --show-progress https://download.sysinternals.com/files/SysinternalsSuite.zip
 dtrx -n SysinternalsSuite.zip
 rm SysinternalsSuite.zip
+
+# sage
+echo -e "${GREEN}[+]${RESET} Installing sage... this may take a while!"
+wget -q --show-progress http://mirror.aarnet.edu.au/pub/sage/linux/64bit/sage-7.6-Debian_GNU_Linux_8-x86_64.tar.bz2
+dtrx -n -q sage-7*
 
 echo -e "${GREEN}[+]${RESET} Upgrading any leftovers.."
 apt-get -qq -y upgrade

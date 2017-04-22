@@ -71,6 +71,15 @@ pip -q install --upgrade pip >> installLog.log || echo -e "${RED}[!]${RESET} pip
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Removing, then installing wireshark again, to avoid segfault things"
 apt -qq -y purge wireshark-common >> installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
 
+# atom
+echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing atom (the best text editor)"
+cd ~/Downloads
+apt-get -qq -y install gvfs-bin
+wget -q --show-progress https://github.com/atom/atom/releases/download/$(curl https://github.com/atom/atom/releases/latest | cut -d / -f 8 - | cut -d \" -f 1 -)/atom-amd64.deb
+dpkg --install atom-amd64.deb >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+rm atom-amd64.deb
+cd ~/
+
 #32 bit headers, snort and wireshark - interactive,  asdfasdfasfd WHY ISNT THIS IN BY DEFAULT?!!?
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing x86 support, snort, and wireshark (noisy, requires user input)"
 apt-get -qq -y install lib32stdc++6 libc6-i386 wireshark snort || echo -e "${RED}[!]${RESET} Install error!"
@@ -333,15 +342,6 @@ echo "export PATH=$PATH:$GOPATH/bin" >> .bashrc
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing glugger"
 cd ~/
 go get github.com/zxsecurity/glugger >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-
-# atom
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing atom (the best text editor)"
-cd ~/Downloads
-apt-get -qq -y install gvfs-bin
-wget -q --show-progress https://github.com/atom/atom/releases/download/$(curl https://github.com/atom/atom/releases/latest | cut -d / -f 8 - | cut -d \" -f 1 -)/atom-amd64.deb
-dpkg --install atom-amd64.deb >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-rm atom-amd64.deb
-cd ~/
 
 # sublime (latest release is 2016, whatever)
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing sublime (the inferior text editor)"

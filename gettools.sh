@@ -118,16 +118,16 @@ cd /opt/
 apt-get purge valabind >> ~/installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
 git clone -q https://github.com/radare/valabind
 cd valabind
-make -s >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-make -s install PREFIX=/usr >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+make -s &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+make -s install PREFIX=/usr &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
 #   r2 bindings
 git clone -q https://github.com/radare/radare2-bindings
 cd radare2-bindings
 ./configure --prefix=/usr >> ~/installLog.log || echo -e "${RED}[!]${RESET} Config error!"
 cd python
-make -s >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-make -s install >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+make -s &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+make -s install &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
 
 #autopsy

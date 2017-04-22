@@ -69,7 +69,7 @@ echo -e "${GREEN}[+]${RESET} Upgrading pip"
 pip -q install --upgrade pip >> installLog.log || echo -e "${RED}[!]${RESET} pip update error!"
 
 #32 bit headers asdfasdfasfd WHY ISNT THIS IN BY DEFAULT?!!?
-echo -e "${GREEN}[+]${RESET} Installing x86 support"
+echo -e "${GREEN}[+]${RESET} Installing x86 support (noisy, requires user input)"
 apt-get -qq -y install lib32stdc++6 libc6-i386 || echo -e "${RED}[!]${RESET} Install error!"
 
 # exfat for usb's

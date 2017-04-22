@@ -67,6 +67,24 @@ apt-get update || echo -e "${RED}[!]${RESET} apt update error!"
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Upgrading pip"
 pip -q install --upgrade pip >> ~/installLog.log || echo -e "${RED}[!]${RESET} pip update error!"
 
+# foresight (rng prediction)
+echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing foresight"
+cd /opt/
+git clone -q https://github.com/ALSchwalm/foresight.git >> ~/installLog.log
+cd foresight
+python setup.py install >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+cd ~/
+
+# RSACtfTool (needs libnum and gmpy)
+echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing RSACtfTool"
+pip -q install gmpy >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+cd /opt/
+git clone -q https://github.com/hellman/libnum.git >> ~/installLog.log
+python libnum/setup.py install >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+git clone -q https://github.com/Ganapati/RsaCtfTool.git >> ~/installLog.log
+ln -s /opt/RsaCtfTool/RsaCtfTool.py /usr/local/bin/rsactftool
+cd ~/
+
 # wireshark sux
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Removing, then installing wireshark again, to avoid segfault things"
 apt-get -qq -y purge wireshark-common >> ~/installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
@@ -165,7 +183,7 @@ echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing jadx"
 cd /opt
 git clone -q https://github.com/skylot/jadx.git >> ~/installLog.log
 cd jadx
-./gradlew dist >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+./gradlew dist &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # cyberchef (run with cyberchef command)
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing cyberchef"
@@ -187,7 +205,7 @@ apt-get -qq -y install apktool >> ~/installLog.log || echo -e "${RED}[!]${RESET}
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing qemu and friends"
 apt-get -qq -y install qemu qemu-kvm qemu-system qemu-system-arm \
 qemu-system-common qemu-system-mips qemu-system-ppc \
-qemu-system-sparc qemu-system-x86 qemu-utils \
+qemu-system-sparc qemu-system-x86 qemu-utils &> ~/installLog.log\
 || echo -e "${RED}[!]${RESET} Install error!"
 
 # die
@@ -253,7 +271,7 @@ echo 'deb http://http.debian.net/debian jessie-backports main' > /etc/apt/source
 apt-get -qq -y install apt-transport-https ca-certificates >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
 echo 'deb https://apt.dockerproject.org/repo debian-jessie main' > /etc/apt/sources.list.d/docker.list && apt-get -qq update
-apt-get -qq -y install docker-engine docker && service docker start
+apt-get -qq -y install docker-engine docker && service docker start >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # voltron
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing voltron"
@@ -377,16 +395,6 @@ ln -s /opt/Sublist3r/sublist3r.py /usr/local/bin/sublist3r
 chmod +x /opt/Sublist3r/sublist3r.py
 cd ~/
 
-# RSACtfTool (needs libnum and gmpy)
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing RSACtfTool"
-pip -q install gmpy >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-cd /opt/
-git clone -q https://github.com/hellman/libnum.git >> ~/installLog.log
-python libnum/setup.py install >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-git clone -q https://github.com/Ganapati/RsaCtfTool.git >> ~/installLog.log
-ln -s /opt/RsaCtfTool/RsaCtfTool.py /usr/local/bin/rsactftool
-cd ~/
-
 # gittools
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing gittools (gitdumper, gitextractor, gitfinder)"
 cd /opt/
@@ -429,7 +437,7 @@ echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing dnscat2"
 cd /opt/
 git clone -q https://github.com/iagox86/dnscat2.git >> ~/installLog.log
 cd dnscat2/client/
-make -s >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+make -s &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 ln -s $(pwd)/dnscat /usr/local/bin/dnscat
 cd ~/
 
@@ -441,13 +449,7 @@ pip install factordb-pycli >> ~/installLog.log || echo -e "${RED}[!]${RESET} Ins
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing tcpxtract"
 apt-get install tcpxtract >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
-# foresight (rng prediction)
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing foresight"
-cd /opt/
-git clone -q https://github.com/ALSchwalm/foresight.git >> ~/installLog.log
-cd foresight
-python setup.py install >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-cd ~/
+
 
 # sysinternals
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Getting sysinternals suite, storing with other windows binaries"

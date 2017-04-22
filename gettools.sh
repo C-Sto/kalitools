@@ -67,15 +67,13 @@ apt-get update || echo -e "${RED}[!]${RESET} apt update error!"
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Upgrading pip"
 pip -q install --upgrade pip >> installLog.log || echo -e "${RED}[!]${RESET} pip update error!"
 
-#32 bit headers asdfasdfasfd WHY ISNT THIS IN BY DEFAULT?!!?
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing x86 support (noisy, requires user input)"
-apt-get -qq -y install lib32stdc++6 libc6-i386 || echo -e "${RED}[!]${RESET} Install error!"
-
 # wireshark sux
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Removing, then installing wireshark again, to avoid segfault things"
 apt -qq -y purge wireshark-common >> installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing wireshark again.. (requires input)"
-apt-get -qq -y install wireshark || echo -e "${RED}[!]${RESET} Install error!"
+
+#32 bit headers and wireshark - interactive,  asdfasdfasfd WHY ISNT THIS IN BY DEFAULT?!!?
+echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing x86 support, and wireshark (noisy, requires user input)"
+apt-get -qq -y install lib32stdc++6 libc6-i386 wireshark || echo -e "${RED}[!]${RESET} Install error!"
 
 # exfat for usb's
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing exfat-fuse"

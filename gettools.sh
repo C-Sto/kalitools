@@ -67,14 +67,6 @@ apt-get update || echo -e "${RED}[!]${RESET} apt update error!"
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Upgrading pip"
 pip -q install --upgrade pip >> ~/installLog.log || echo -e "${RED}[!]${RESET} pip update error!"
 
-# foresight (rng prediction)
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing foresight"
-cd /opt/
-git clone -q https://github.com/ALSchwalm/foresight.git >> ~/installLog.log
-cd foresight
-python setup.py install >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-cd ~/
-
 # RSACtfTool (needs libnum and gmpy)
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing RSACtfTool"
 pip -q install gmpy >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"

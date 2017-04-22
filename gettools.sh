@@ -67,16 +67,6 @@ apt-get update || echo -e "${RED}[!]${RESET} apt update error!"
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Upgrading pip"
 pip -q install --upgrade pip >> ~/installLog.log || echo -e "${RED}[!]${RESET} pip update error!"
 
-# RSACtfTool (needs libnum and gmpy)
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing RSACtfTool"
-pip -q install gmpy >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-cd /opt/
-git clone -q https://github.com/hellman/libnum.git >> ~/installLog.log
-python libnum/setup.py install >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-git clone -q https://github.com/Ganapati/RsaCtfTool.git >> ~/installLog.log
-ln -s /opt/RsaCtfTool/RsaCtfTool.py /usr/local/bin/rsactftool
-cd ~/
-
 # wireshark sux
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Removing, then installing wireshark again, to avoid segfault things"
 apt-get -qq -y purge wireshark-common >> ~/installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
@@ -441,7 +431,17 @@ pip install factordb-pycli >> ~/installLog.log || echo -e "${RED}[!]${RESET} Ins
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing tcpxtract"
 apt-get install tcpxtract >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
-
+# RSACtfTool (needs libnum and gmpy)
+echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing RSACtfTool"
+pip -q install gmpy >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+cd /opt/
+git clone -q https://github.com/hellman/libnum.git >> ~/installLog.log
+cd libnum
+python setup.py install >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+cd /opt/
+git clone -q https://github.com/Ganapati/RsaCtfTool.git >> ~/installLog.log
+ln -s /opt/RsaCtfTool/RsaCtfTool.py /usr/local/bin/rsactftool
+cd ~/
 
 # sysinternals
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Getting sysinternals suite, storing with other windows binaries"

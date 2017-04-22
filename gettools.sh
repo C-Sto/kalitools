@@ -101,6 +101,7 @@ cd ~/
 # wireshark sux
 echo -e "${GREEN}[+]${RESET} Removing, then installing wireshark again, to avoid segfault things"
 apt -qq -y purge wireshark-common >> installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
+echo e "${GREEN}[+]${RESET} Installing wireshark again.."
 apt-get -qq -y install wireshark >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # get a better r2 idk if it works? https://securityblog.gr/3791/install-latest-radare2-on-kali/

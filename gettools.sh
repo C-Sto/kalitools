@@ -70,7 +70,7 @@ pip -q install --upgrade pip >> installLog.log || echo -e "${RED}[!]${RESET} pip
 
 #32 bit headers asdfasdfasfd WHY ISNT THIS IN BY DEFAULT?!!?
 echo -e "${GREEN}[+]${RESET} Installing x86 support"
-apt-get -qq -y install lib32stdc++6 libc6-i386 >> installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+apt-get -qq -y install lib32stdc++6 libc6-i386 || echo -e "${RED}[!]${RESET} Install error!"
 
 # exfat for usb's
 echo -e "${GREEN}[+]${RESET} Installing exfat-fuse"

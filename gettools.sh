@@ -1,85 +1,156 @@
 #!/bin/bash
 
-# CHANGE YOUR PASSWORD
-passwd
+# Thanks GotMilk for pretty things :D
+RED="\033[01;31m"      # Issues/Errors
+GREEN="\033[01;32m"    # Success
+YELLOW="\033[01;33m"   # Warnings/Information
+BLUE="\033[01;34m"     # Heading
+BOLD="\033[01;01m"     # Highlight
+RESET="\033[00m"       # Normal
+# Fix display (also from gotmilks install script)
+export DISPLAY=:0.0
+export TERM=xterm
+
+##### Read command line arguments (based on the gotmilk install script)
+while [[ "${#}" -gt 0 && ."${1}" == .-* ]]; do
+  opt="${1}";
+  shift;
+  case "$(echo ${opt} | tr '[:upper:]' '[:lower:]')" in
+    -|-- ) break 2;;
+
+    -m|--mirror )
+      MIRROR="${1}"; shift;;
+    -m=*|--mirror=* )
+      MIRROR="${opt#*=}";;
+    *) echo -e ' '${RED}'[!]'${RESET}" Unknown option: ${RED}${x}${RESET}" 1>&2 \
+      && exit 1;;
+   esac
+done
+
+if [ ${MIRROR} ]; then
+  # check for the mirror already existing in the file, indicates this has been done before..
+  if grep $MIRROR /etc/apt/sources.list; then
+    echo -e "${YELLOW}[!]${RESET} Mirror appears to exist in sources.list file, taking no further action"
+  else
+    # inevitably, something will go wrong... try to minimize the damage
+    echo -e "${GREEN}[+]${RESET} Adding mirror to sources.list.."
+    cp /etc/apt/sources.list /etc/apt/sources.list.backup
+    sed -i -e "1ideb ftp://$MIRROR/kali kali-rolling main non-free contrib" /etc/apt/sources.list
+  fi
+fi
+
+# CHANGE YOUR PASSWORD FROM TOOR PLEASE
+ALG=$(cat /etc/shadow | grep "root" | cut -d \$ -f 2)
+if [ "$ALG" == "6" ]; then
+  SALT=$(cat /etc/shadow | grep "root" | cut -d \$ -f 3)
+  HASH=$(cat /etc/shadow | grep "root" | cut -d \$ -f 4)
+  HASH=$(echo $HASH | cut -d \: -f 1)
+  TOORHASH=$(echo "toor" | mkpasswd -P 0 -m sha-512 -S $SALT)
+  TOORHASH=$(echo $TOORHASH | cut -d \$ -f 4)
+  if [ "$TOORHASH" == "$HASH" ]; then
+    echo -e "${RED}[!] ROOT PASSWORD IS DEFAULT!${RESET}"
+    passwd
+  fi
+else
+  echo -e "${RED}[!] Hashing algorithm not \$6\$! Pls fix this manually. Changing password anyway${RESET}"
+  passwd
+fi
+# unintended password disclosure is the best
+ALG=
+SALT=
+HASH=
 
 # ofc
-apt-get update
-apt-get -y upgrade
-apt --fix-broken install
-pip install --upgrade pip
+echo -e "${GREEN}[+]${RESET} Apt updating, make sure nothing odd is in the output if custom mirrors are being used"
+apt-get update || echo -e "${RED}[!]${RESET} apt update error!"
+# hmm
+#apt --fix-broken install
+echo -e "${GREEN}[+]${RESET} Upgrading pip"
+pip install --upgrade pip || echo -e "${RED}[!]${RESET} pip update error!"
 
 #32 bit headers asdfasdfasfd WHY ISNT THIS IN BY DEFAULT?!!?
-apt-get -y install lib32stdc++6 libc6-i386
+echo -e "${GREEN}[+]${RESET} Installing x86 support"
+apt-get -qq -y install lib32stdc++6 libc6-i386 || echo -e "${RED}[!]${RESET} Install error!"
 
 # exfat for usb's
-apt-get -y install exfat-fuse
+echo -e "${GREEN}[+]${RESET} Installing exfat-fuse"
+apt-get -qq -y install exfat-fuse || echo -e "${RED}[!]${RESET} Install error!"
 
 # ntpdate because VM's + time is hard
-apt-get -y install ntpdate
+echo -e "${GREEN}[+]${RESET} Installing ntp things"
+apt-get -qq -y install ntpdate || echo -e "${RED}[!]${RESET} Install error!"
 ntpdate -s pool.ntp.org
 
 # speaking of VM's, vmware tools pls
-apt-get -y install open-vm-tools-desktop
+echo -e "${GREEN}[+]${RESET} Installing vmware tools"
+apt-get -qq -y install open-vm-tools-desktop || echo -e "${RED}[!]${RESET} Install error!"
 
 # pwntools
-apt-get -y install python2.7 python-pip python-dev git libssl-dev libffi-dev build-essential
-pip install --upgrade pip
-pip install --upgrade pwntools
+echo -e "${GREEN}[+]${RESET} Installing pwntools"
+apt-get -qq -y install python2.7 python-pip python-dev git libssl-dev libffi-dev build-essential || echo -e "${RED}[!]${RESET} Install error!"
+pip install --upgrade pip || echo -e "${RED}[!]${RESET} Install error!"
+pip install --upgrade pwntools || echo -e "${RED}[!]${RESET} Install error!"
 
 #gdb-peda
-apt-get -y install gdb-peda
+echo -e "${GREEN}[+]${RESET} Installing gdb-peda"
+apt-get -qq -y install gdb-peda || echo -e "${RED}[!]${RESET} Install error!"
 
 # wireshark sux
-apt-get -y remove wireshark-common
-apt-get -y install wireshark
+echo -e "${GREEN}[+]${RESET} Removing, then installing wireshark again, to avoid segfault things"
+apt-get -qq -y remove wireshark-common || echo -e "${RED}[!]${RESET} Uninstall error!"
+apt-get -qq -y install wireshark || echo -e "${RED}[!]${RESET} Install error!"
 
 # get a better r2 idk if it works? https://securityblog.gr/3791/install-latest-radare2-on-kali/
-apt-get -y purge radare2
+echo -e "${GREEN}[+]${RESET} Getting a better r2"
+apt-get -qq -y purge radare2 || echo -e "${RED}[!]${RESET} Uninstall error!"
 # probably should work out how to make this automatically the most recent but whatever
-apt-get -y install valac libvala-0.34-dev swig
-pip install r2pipe
-pip install --upgrade xdot
+apt-get -qq -y install valac libvala-0.34-dev swig || echo -e "${RED}[!]${RESET} Install error!"
+pip install r2pipe || echo -e "${RED}[!]${RESET} Install error!"
+pip install --upgrade xdot || echo -e "${RED}[!]${RESET} Install error!"
 cd /opt
 git clone https://github.com/radare/radare2
 cd radare2
-sys/install.sh
+sys/install.sh || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
-
 #   valabind
 cd /opt/
-apt-get purge valabind
+apt-get purge valabind || echo -e "${RED}[!]${RESET} Uninstall error!"
 git clone https://github.com/radare/valabind
 cd valabind
-make
-make install PREFIX=/usr
+make || echo -e "${RED}[!]${RESET} Install error!"
+make install PREFIX=/usr || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
 #   r2 bindings
-#git clone https://github.com/radare/radare2-bindings
-#cd radare2-bindings
-#./configure --prefix=/usr
-#cd python
-#make
-#make install
-#cd ~/
+git clone https://github.com/radare/radare2-bindings
+cd radare2-bindings
+./configure --prefix=/usr || echo -e "${RED}[!]${RESET} Config error!"
+cd python
+make || echo -e "${RED}[!]${RESET} Install error!"
+make install || echo -e "${RED}[!]${RESET} Install error!"
+cd ~/
 
 #autopsy
-apt-get -y install autopsy
+echo -e "${GREEN}[+]${RESET} Installing autopsy"
+apt-get -qq -y install autopsy || echo -e "${RED}[!]${RESET} Install error!"
 
 # caca
-apt-get -y install caca-utils
+echo -e "${GREEN}[+]${RESET} Installing caca-utils"
+apt-get -qq -y install caca-utils || echo -e "${RED}[!]${RESET} Install error!"
 
 # esptool
-apt-get -y install esptool
+echo -e "${GREEN}[+]${RESET} Installing esptool"
+apt-get -qq -y install esptool || echo -e "${RED}[!]${RESET} Install error!"
 
 # espeak
-apt-get -y install espeak
+echo -e "${GREEN}[+]${RESET} Installing espeak"
+apt-get -qq -y install espeak || echo -e "${RED}[!]${RESET} Install error!"
 
 # virtualenv
-apt-get -y install virtualenv
+echo -e "${GREEN}[+]${RESET} Installing virtualenv"
+apt-get -qq -y install virtualenv || echo -e "${RED}[!]${RESET} Install error!"
 
 # droidbox IDKLOL http://blog.dornea.nu/2014/08/05/android-dynamic-code-analysis-mastering-droidbox/
-#apt-get -y install python-virtualenv libatlas-dev liblapack-dev libblas-dev
+#apt-get -qq -y install python-virtualenv libatlas-dev liblapack-dev libblas-dev
 #cd ~/
 # apparently you have to do some env stuff? idk
 #mkdir droidenv
@@ -89,12 +160,14 @@ apt-get -y install virtualenv
 #wget https://droidbox.googlecode.com/files/DroidBox411RC.tar.gz
 
 # jadx
+echo -e "${GREEN}[+]${RESET} Installing jadx"
 cd /opt
 git clone https://github.com/skylot/jadx.git
 cd jadx
-./gradlew dist
+./gradlew dist || echo -e "${RED}[!]${RESET} Install error!"
 
 # cyberchef (run with cyberchef command)
+echo -e "${GREEN}[+]${RESET} Installing cyberchef"
 mkdir /opt/cyberchef
 wget https://gchq.github.io/CyberChef/cyberchef.htm -O /opt/cyberchef/cyberchef.htm
 echo '#!/bin/bash' > /usr/local/bin/cyberchef
@@ -102,123 +175,157 @@ echo 'firefox /opt/cyberchef/cyberchef.htm' > /usr/local/bin/cyberchef
 chmod +x /usr/local/bin/cyberchef
 
 # cmatrix
-apt-get -y install cmatrix
+echo -e "${GREEN}[+]${RESET} Installing cmatrix"
+apt-get -qq -y install cmatrix || echo -e "${RED}[!]${RESET} Install error!"
 
 # apktool
-apt-get -y install apktool
+echo -e "${GREEN}[+]${RESET} Installing apktool"
+apt-get -qq -y install apktool || echo -e "${RED}[!]${RESET} Install error!"
 
 # qemu
-apt-get -y install qemu qemu-kvm qemu-system qemu-system-arm qemu-system-common qemu-system-mips qemu-system-ppc qemu-system-sparc qemu-system-x86 qemu-utils
+echo -e "${GREEN}[+]${RESET} Installing qemu and friends"
+apt-get -qq -y install qemu qemu-kvm qemu-system qemu-system-arm \
+qemu-system-common qemu-system-mips qemu-system-ppc \
+qemu-system-sparc qemu-system-x86 qemu-utils \
+|| echo -e "${RED}[!]${RESET} Install error!"
 
 # die
+echo -e "${GREEN}[+]${RESET} Installing Detect it Easy (run as die)"
 mkdir /opt/die
-wget https://www.dropbox.com/s/7v49w3jiey9rrjm/DIE_1.01_lin64.tar.gz?dl=1 -O /opt/die/DIE1.01.tar.gz
+wget https://www.dropbox.com/s/7v49w3jiey9rrjm/DIE_1.01_lin64.tar.gz?dl=1 -O /opt/die/DIE1.01.tar.gz || echo -e "${RED}[!]${RESET} Can't get DIE!"
 tar -xf /opt/die/DIE1.01.tar.gz -C /opt/die/
 ln -s /opt/die/lin64/die /usr/local/bin/
 
 # preeny
-apt-get -y install libini-config-dev
+echo -e "${GREEN}[+]${RESET} Installing preeny to homedir"
+apt-get -qq -y install libini-config-dev || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
 git clone https://github.com/zardus/preeny.git
 cd preeny
-make
+make || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
 
 # thefuck
-apt-get -y install python3-dev python3-pip
-pip install --user thefuck
+echo -e "${GREEN}[+]${RESET} Installing thefuck"
+apt-get -qq -y install python3-dev python3-pip || echo -e "${RED}[!]${RESET} Install error!"
+pip install --user thefuck || echo -e "${RED}[!]${RESET} Install error!"
 
 # bro
-apt-get -y install bro
+echo -e "${GREEN}[+]${RESET} Installing bro"
+apt-get -qq -y install bro || echo -e "${RED}[!]${RESET} Install error!"
 
 # bless
-apt-get -y install bless
+echo -e "${GREEN}[+]${RESET} Installing bless"
+apt-get -qq -y install bless || echo -e "${RED}[!]${RESET} Install error!"
 
 # empire
-apt-get -y install empire
+echo -e "${GREEN}[+]${RESET} Installing empire"
+apt-get -qq -y install empire || echo -e "${RED}[!]${RESET} Install error!"
 
 # hob0rules
+echo -e "${GREEN}[+]${RESET} Installing hob0rules"
 cd ~/
 mkdir hob0rules
 cd hob0rules
-wget https://raw.githubusercontent.com/praetorian-inc/Hob0Rules/master/d3adhob0.rule
-wget https://raw.githubusercontent.com/praetorian-inc/Hob0Rules/master/hob064.rule
+wget https://raw.githubusercontent.com/praetorian-inc/Hob0Rules/master/d3adhob0.rule || echo -e "${RED}[!]${RESET} Get error!"
+wget https://raw.githubusercontent.com/praetorian-inc/Hob0Rules/master/hob064.rule || echo -e "${RED}[!]${RESET} Get error!"
 cd ~/
 
 # magic wormhole
-apt-get -y install magic-wormhole
+echo -e "${GREEN}[+]${RESET} Installing magic wormhole"
+apt-get -qq -y install magic-wormhole || echo -e "${RED}[!]${RESET} Install error!"
 
 # bloodhound
-apt-get -y install apt-transport-https
+echo -e "${GREEN}[+]${RESET} Installing bloodhound"
+apt-get -qq -y install apt-transport-https || echo -e "${RED}[!]${RESET} Install error!"
 wget -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add -
 echo 'deb https://debian.neo4j.org/repo stable/' | sudo tee /etc/apt/sources.list.d/neo4j.list
-apt-get update
-apt-get -y install neo4j
+apt-get -qq update
+apt-get -qq -y install neo4j || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
 git clone https://github.com/adaptivethreat/Bloodhound
 # THIS SEEMS OK
 
-#docker :rolleyes: adsfasdfsadf no idea
-echo 'deb http://http.debian.net/debian wheezy-backports main' > /etc/apt/sources.list.d/backports.list && apt-get update
-apt-get -y install apt-transport-https ca-certificates
+#docker :rolleyes: adsfasdfsadf this is very ugly
+echo -e "${GREEN}[+]${RESET} Installing docker.. hold on tight"
+echo 'deb http://http.debian.net/debian jessie-backports main' > /etc/apt/sources.list.d/backports.list && apt-get -qq update
+apt-get -qq -y install apt-transport-https ca-certificates || echo -e "${RED}[!]${RESET} Install error!"
 apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-echo 'deb https://apt.dockerproject.org/repo debian-wheezy main' > /etc/apt/sources.list.d/docker.list && apt-get update
-apt-get -y install docker-engine docker && service docker start
+echo 'deb https://apt.dockerproject.org/repo debian-jessie main' > /etc/apt/sources.list.d/docker.list && apt-get -qq update
+apt-get -qq -y install docker-engine docker && service docker start
 
 # voltron
-apt-get -y install voltron
+echo -e "${GREEN}[+]${RESET} Installing voltron"
+apt-get -qq -y install voltron || echo -e "${RED}[!]${RESET} Install error!"
 
 # snort
-apt-get -y install snort
+echo -e "${GREEN}[+]${RESET} Installing snort"
+apt-get -qq -y install snort || echo -e "${RED}[!]${RESET} Install error!"
 
 # yara
-apt-get -y install yara
+echo -e "${GREEN}[+]${RESET} Installing yara"
+apt-get -qq -y install yara || echo -e "${RED}[!]${RESET} Install error!"
 
 #ltrace
-apt-get -y install ltrace
+echo -e "${GREEN}[+]${RESET} Installing ltrace"
+apt-get -qq -y install ltrace || echo -e "${RED}[!]${RESET} Install error!"
 
 # cowsay
-apt-get -y install cowsay
+echo -e "${GREEN}[+]${RESET} Installing cowsay"
+apt-get -qq -y install cowsay || echo -e "${RED}[!]${RESET} Install error!"
 
 # irssi
-apt-get -y install irssi
+echo -e "${GREEN}[+]${RESET} Installing irssi"
+apt-get -qq -y install irssi || echo -e "${RED}[!]${RESET} Install error!"
 
 # lynx
-apt-get -y install lynx
+echo -e "${GREEN}[+]${RESET} Installing lynx"
+apt-get -qq -y install lynx || echo -e "${RED}[!]${RESET} Install error!"
 
 # beef
-apt-get -y install beef
+echo -e "${GREEN}[+]${RESET} Installing beef"
+apt-get -qq -y install beef || echo -e "${RED}[!]${RESET} Install error!"
 
 # afl
-apt-get -y install afl
+echo -e "${GREEN}[+]${RESET} Installing afl"
+apt-get -qq -y install afl || echo -e "${RED}[!]${RESET} Install error!"
 
 # gimp
-apt-get -y install gimp
+echo -e "${GREEN}[+]${RESET} Installing gimp"
+apt-get -qq -y install gimp || echo -e "${RED}[!]${RESET} Install error!"
 
 # masscan
-apt-get -y install masscan
+echo -e "${GREEN}[+]${RESET} Installing masscan"
+apt-get -qq -y install masscan || echo -e "${RED}[!]${RESET} Install error!"
 
 # unicorn
-apt-get -y install unicornscan
+echo -e "${GREEN}[+]${RESET} Installing unicorn"
+apt-get -qq -y install unicornscan || echo -e "${RED}[!]${RESET} Install error!"
 
 # audacity
-apt-get -y install audacity
+echo -e "${GREEN}[+]${RESET} Installing audacity"
+apt-get -qq -y install audacity || echo -e "${RED}[!]${RESET} Install error!"
 
 # responder
-apt-get -y install responder
+echo -e "${GREEN}[+]${RESET} Installing responder"
+apt-get -qq -y install responder || echo -e "${RED}[!]${RESET} Install error!"
 
 # sshuttle
-apt-get -y install sshuttle
+echo -e "${GREEN}[+]${RESET} Installing sshuttle"
+apt-get -qq -y install sshuttle || echo -e "${RED}[!]${RESET} Install error!"
 
 # zsteg (rake is magic fixer of the error..ok? ruby rules)
-gem install rake
-gem install zsteg
+echo -e "${GREEN}[+]${RESET} Installing zsteg"
+gem install rake || echo -e "${RED}[!]${RESET} Install error!"
+gem install zsteg || echo -e "${RED}[!]${RESET} Install error!"
 
 # exiftool
-apt install exiftool
+echo -e "${GREEN}[+]${RESET} Installing exiftool"
+apt install exiftool || echo -e "${RED}[!]${RESET} Install error!"
 
 # golang
-apt-get -y install golang
+echo -e "${GREEN}[+]${RESET} Installing golang, and setting up environment in homedir/golang"
+apt-get -qq -y install golang || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
 mkdir golang
 export GOPATH=~/golang/
@@ -227,24 +334,28 @@ echo "export GOPATH=~/golang/" >> .bashrc
 echo "export PATH=$PATH:$GOPATH/bin" >> .bashrc
 
 # glugger
+echo -e "${GREEN}[+]${RESET} Installing glugger"
 cd ~/
-go get github.com/zxsecurity/glugger
+go get github.com/zxsecurity/glugger || echo -e "${RED}[!]${RESET} Install error!"
 
 # atom
+echo -e "${GREEN}[+]${RESET} Installing atom (the best text editor)"
 cd ~/Downloads
 wget https://github.com/atom/atom/releases/download/$(curl https://github.com/atom/atom/releases/latest | cut -d / -f 8 - | cut -d \" -f 1 -)/atom-amd64.deb
-dpkg --install atom-amd64.deb
+dpkg --install atom-amd64.deb || echo -e "${RED}[!]${RESET} Install error!"
 rm atom-amd64.deb
 cd ~/
 
 # sublime (latest release is 2016, whatever)
+echo -e "${GREEN}[+]${RESET} Installing sublime (the inferior text editor)"
 cd ~/Downloads
 wget https://download.sublimetext.com/sublime-text_build-3126_amd64.deb
-dpkg --install sublime-text_build-3126_amd64.deb
+dpkg --install sublime-text_build-3126_amd64.deb || echo -e "${RED}[!]${RESET} Install error!"
 rm sublime-text_build-3126_amd64.deb
 cd ~/
 
 # privesc
+echo -e "${GREEN}[+]${RESET} Getting privesc scripts, storing in homedir/Privesc"
 mkdir Privesc
 cd Privesc
 mkdir Linux
@@ -261,6 +372,7 @@ git clone https://github.com/GDSSecurity/Windows-Exploit-Suggester.git
 cd ~/
 
 # sublist3r
+echo -e "${GREEN}[+]${RESET} Installing sublist3r"
 cd /opt/
 git clone https://github.com/aboul3la/Sublist3r.git
 ln -s /opt/Sublist3r/sublist3r.py /usr/local/bin/sublist3r
@@ -268,15 +380,17 @@ chmod +x /opt/Sublist3r/sublist3r.py
 cd ~/
 
 # RSACtfTool (needs libnum and gmpy)
-pip install gmpy
+echo -e "${GREEN}[+]${RESET} Installing RSACtfTool"
+pip install gmpy || echo -e "${RED}[!]${RESET} Install error!"
 cd /opt/
 git clone git clone https://github.com/hellman/libnum.git
-python libnum/setup.py install
+python libnum/setup.py install || echo -e "${RED}[!]${RESET} Install error!"
 git clone https://github.com/Ganapati/RsaCtfTool.git
 ln -s /opt/RsaCtfTool/RsaCtfTool.py /usr/local/bin/rsactftool
 cd ~/
 
 # gittools
+echo -e "${GREEN}[+]${RESET} Installing gittools (gitdumper, gitextractor, gitfinder)"
 cd /opt/
 git clone https://github.com/internetwache/GitTools.git
 ln -s /opt/GitTools/Dumper/gitdumper.sh /usr/local/bin/gitdumper
@@ -285,61 +399,72 @@ ln -s /opt/GitTools/Finder/gitfinder.sh /usr/local/bin/gitfinder
 cd ~/
 
 # do the right extraction (dtrx)
-apt-get -y install dtrx
+echo -e "${GREEN}[+]${RESET} Installing dtrx"
+apt-get -qq -y install dtrx || echo -e "${RED}[!]${RESET} Install error!"
 
 # node
-apt-get -y install npm nodejs
+echo -e "${GREEN}[+]${RESET} Installing node (lol)"
+apt-get -qq -y install npm nodejs || echo -e "${RED}[!]${RESET} Install error!"
 
 # vlan hopper (frogger)
+echo -e "${GREEN}[+]${RESET} Installing frogger/vlan hopper (use as frogger)"
 cd /opt/
 git clone https://github.com/nccgroup/vlan-hopping.git
 chmod +x vlan-hopping/frogger.sh
 ln -s /opt/vlan-hopping/frogger.sh /usr/local/bin/frogger
 
 # fastcoll
+echo -e "${GREEN}[+]${RESET} Installing fastcoll (the good one)"
 cd /opt/
 git clone https://github.com/upbit/clone-fastcoll.git
 cd clone-fastcoll
-make
+make || echo -e "${RED}[!]${RESET} Install error!"
 ln -s /opt/clone-fastcoll/fastcoll /usr/local/bin/fastcoll
 cd ~/
 
 # figlet
-apt-get -y install figlet
+echo -e "${GREEN}[+]${RESET} Installing figlet"
+apt-get -qq -y install figlet || echo -e "${RED}[!]${RESET} Install error!"
 
 # dnscat2
+echo -e "${GREEN}[+]${RESET} Installing dnscat2"
 cd /opt/
 git clone https://github.com/iagox86/dnscat2.git
 cd dnscat2/client/
-make
+make || echo -e "${RED}[!]${RESET} Install error!"
 ln -s $(pwd)/dnscat /usr/local/bin/dnscat
 cd ~/
 
 # factordb
-pip install factordb-pycli
-
-# 1
+echo -e "${GREEN}[+]${RESET} Installing factordb cli"
+pip install factordb-pycli || echo -e "${RED}[!]${RESET} Install error!"
 
 # tcpxtract
-apt-get install tcpxtract
+echo -e "${GREEN}[+]${RESET} Installing tcpxtract"
+apt-get install tcpxtract || echo -e "${RED}[!]${RESET} Install error!"
 
 # foresight (rng prediction)
+echo -e "${GREEN}[+]${RESET} Installing foresight"
 cd /opt/
 git clone https://github.com/ALSchwalm/foresight.git
 cd foresight
-python setup.py install
+python setup.py install || echo -e "${RED}[!]${RESET} Install error!"
 cd ~/
 
 # sysinternals
+echo -e "${GREEN}[+]${RESET} Getting sysinternals suite, storing with other windows binaries"
 cd /usr/share/windows-binaries
 wget https://download.sysinternals.com/files/SysinternalsSuite.zip
 dtrx -n SysinternalsSuite.zip
 rm SysinternalsSuite.zip
 
+echo -e "${GREEN}[+]${RESET} Upgrading any leftovers.."
+apt-get -qq -y upgrade
 
 # apt-get autogoodcleanremove
-apt-get -y autoremove
-apt-get -y autoclean
+echo -e "${GREEN}[+]${RESET} autoremoving, autocleaning, rebooting"
+apt-get -qq -y autoremove
+apt-get -qq -y autoclean
 
 # reboot because yes
 reboot

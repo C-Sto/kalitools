@@ -140,7 +140,11 @@ apt-get -qq -y install caca-utils >> ~/installLog.log || echo -e "${RED}[!]${RES
 
 # esptool
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing esptool"
-apt-get -qq -y install esptool >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+#apt-get -qq -y install esptool >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+cd /opt/
+git clone https://github.com/espressif/esptool.git
+cd esptool
+python setup.py install
 
 # espeak
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing espeak"

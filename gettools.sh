@@ -457,7 +457,7 @@ cd ~/
 
 # sage
 # we don't want to re-install if it's already installed, 1.2gb download is kinda brutal
-if [ -e /usr/usr/local/bin/sage]; then
+if [ -e /usr/usr/local/bin/sage ]; then
   echo "$(date '+%X') ${YELLOW}[+]${RESET} Sage installed already"
 else
   echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing sage... this may take a while!"

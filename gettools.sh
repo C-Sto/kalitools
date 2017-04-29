@@ -95,40 +95,49 @@ pip -q install --upgrade pip >> ~/installLog.log || echo -e "${RED}[!]${RESET} I
 pip -q install --upgrade pwntools >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 #gdb-peda
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing gdb-peda"
-cd /opt/
-git clone -q https://github.com/longld/peda.git >> ~/installLog.log && echo "source /opt/peda/peda.py" >> ~/.gdbinit || echo -e "${RED}[!]${RESET} Install error!"
-cd ~/
+if [ -e /opt/peda ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} Peda installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing gdb-peda"
+  cd /opt/
+  git clone -q https://github.com/longld/peda.git >> ~/installLog.log && echo "source /opt/peda/peda.py" >> ~/.gdbinit || echo -e "${RED}[!]${RESET} Install error!"
+  cd ~/
+fi
 
 # get a better r2 idk if it works? https://securityblog.gr/3791/install-latest-radare2-on-kali/
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Getting a better r2"
-apt-get -qq -y purge radare2 >> ~/installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
-# probably should work out how to make this automatically the most recent but whatever
-apt-get -qq -y install valac libvala-0.34-dev swig >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-pip -q install r2pipe >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-pip -q install --upgrade xdot >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-cd /opt
-git clone -q https://github.com/radare/radare2
-cd radare2
-# &> directs _all_ output into the log, no errors will show (tons of build stuff is spewed out, so this is good to keep it clean)
-sys/install.sh &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-cd ~/
-#   valabind
-cd /opt/
-apt-get purge valabind >> ~/installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
-git clone -q https://github.com/radare/valabind
-cd valabind
-make -s &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-make -s install PREFIX=/usr &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-cd ~/
-#   r2 bindings
-git clone -q https://github.com/radare/radare2-bindings
-cd radare2-bindings
-./configure --prefix=/usr >> ~/installLog.log || echo -e "${RED}[!]${RESET} Config error!"
-cd python
-make -s &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-make -s install &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-cd ~/
+if [ -e /opt/radare2-bindings ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} Good r2 installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Getting a better r2"
+  apt-get -qq -y purge radare2 >> ~/installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
+  # probably should work out how to make this automatically the most recent but whatever
+  apt-get -qq -y install valac libvala-0.34-dev swig >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  pip -q install r2pipe >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  pip -q install --upgrade xdot >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  cd /opt
+  git clone -q https://github.com/radare/radare2
+  cd radare2
+  # &> directs _all_ output into the log, no errors will show (tons of build stuff is spewed out, so this is good to keep it clean)
+  sys/install.sh &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  cd ~/
+  #   valabind
+  cd /opt/
+  apt-get purge valabind >> ~/installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
+  git clone -q https://github.com/radare/valabind
+  cd valabind
+  make -s &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  make -s install PREFIX=/usr &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  cd ~/
+  #   r2 bindings
+  cd /opt
+  git clone -q https://github.com/radare/radare2-bindings
+  cd radare2-bindings
+  ./configure --prefix=/usr >> ~/installLog.log || echo -e "${RED}[!]${RESET} Config error!"
+  cd python
+  make -s &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  make -s install &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  cd ~/
+fi
 
 #autopsy
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing autopsy"
@@ -139,12 +148,16 @@ echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing caca-utils"
 apt-get -qq -y install caca-utils >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # esptool
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing esptool"
-#apt-get -qq -y install esptool >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-cd /opt/
-git clone https://github.com/espressif/esptool.git
-cd esptool
-python setup.py install
+if [ -e /opt/esptool ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} cyberchef installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing esptool"
+  #apt-get -qq -y install esptool >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  cd /opt/
+  git clone https://github.com/espressif/esptool.git
+  cd esptool
+  python setup.py install
+fi
 
 # espeak
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing espeak"
@@ -165,19 +178,27 @@ apt-get -qq -y install virtualenv >> ~/installLog.log || echo -e "${RED}[!]${RES
 #wget https://droidbox.googlecode.com/files/DroidBox411RC.tar.gz
 
 # jadx
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing jadx"
-cd /opt
-git clone -q https://github.com/skylot/jadx.git >> ~/installLog.log
-cd jadx
-./gradlew dist &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+if [ -e /opt/jadx ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} jadx installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing jadx"
+  cd /opt
+  git clone -q https://github.com/skylot/jadx.git >> ~/installLog.log
+  cd jadx
+  ./gradlew dist &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+fi
 
 # cyberchef (run with cyberchef command)
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing cyberchef"
-mkdir /opt/cyberchef
-wget -q --show-progress https://gchq.github.io/CyberChef/cyberchef.htm -O /opt/cyberchef/cyberchef.htm
-echo '#!/bin/bash' > /usr/local/bin/cyberchef
-echo 'firefox /opt/cyberchef/cyberchef.htm' > /usr/local/bin/cyberchef
-chmod +x /usr/local/bin/cyberchef
+if [ -e /usr/local/bin/cyberchef ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} cyberchef installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing cyberchef"
+  mkdir /opt/cyberchef
+  wget -q --show-progress https://gchq.github.io/CyberChef/cyberchef.htm -O /opt/cyberchef/cyberchef.htm
+  echo '#!/bin/bash' > /usr/local/bin/cyberchef
+  echo 'firefox /opt/cyberchef/cyberchef.htm' > /usr/local/bin/cyberchef
+  chmod +x /usr/local/bin/cyberchef
+fi
 
 # cmatrix
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing cmatrix"
@@ -195,20 +216,28 @@ qemu-system-sparc qemu-system-x86 qemu-utils &> ~/installLog.log\
 || echo -e "${RED}[!]${RESET} Install error!"
 
 # die
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing Detect it Easy (run as die)"
-mkdir /opt/die
-wget -q --show-progress https://www.dropbox.com/s/7v49w3jiey9rrjm/DIE_1.01_lin64.tar.gz?dl=1 -O /opt/die/DIE1.01.tar.gz || echo -e "${RED}[!]${RESET} Can't get DIE!"
-tar -xf /opt/die/DIE1.01.tar.gz -C /opt/die/
-ln -s /opt/die/lin64/die /usr/local/bin/
+if [ -e /usr/local/bin/die ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} die installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing Detect it Easy (run as die)"
+  mkdir /opt/die
+  wget -q --show-progress https://www.dropbox.com/s/7v49w3jiey9rrjm/DIE_1.01_lin64.tar.gz?dl=1 -O /opt/die/DIE1.01.tar.gz || echo -e "${RED}[!]${RESET} Can't get DIE!"
+  tar -xf /opt/die/DIE1.01.tar.gz -C /opt/die/
+  ln -s /opt/die/lin64/die /usr/local/bin/
+fi
 
 # preeny
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing preeny to homedir"
-apt-get -qq -y install libini-config-dev >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-cd ~/
-git clone -q https://github.com/zardus/preeny.git >> ~/installLog.log
-cd preeny
-make -s >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-cd ~/
+if [ -e ~/preeny ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} preeny installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing preeny to homedir"
+  apt-get -qq -y install libini-config-dev >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  cd ~/
+  git clone -q https://github.com/zardus/preeny.git >> ~/installLog.log
+  cd preeny
+  make -s >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  cd ~/
+fi
 
 # thefuck
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing thefuck"
@@ -228,36 +257,48 @@ echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing empire"
 apt-get -qq -y install empire >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # hob0rules
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing hob0rules"
-cd ~/
-mkdir hob0rules
-cd hob0rules
-wget -q --show-progress https://raw.githubusercontent.com/praetorian-inc/Hob0Rules/master/d3adhob0.rule || echo -e "${RED}[!]${RESET} Get error!"
-wget -q --show-progress https://raw.githubusercontent.com/praetorian-inc/Hob0Rules/master/hob064.rule || echo -e "${RED}[!]${RESET} Get error!"
-cd ~/
+if [ -e ~/hob0rules ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} hob0rules installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing hob0rules"
+  cd ~/
+  mkdir hob0rules
+  cd hob0rules
+  wget -q --show-progress https://raw.githubusercontent.com/praetorian-inc/Hob0Rules/master/d3adhob0.rule || echo -e "${RED}[!]${RESET} Get error!"
+  wget -q --show-progress https://raw.githubusercontent.com/praetorian-inc/Hob0Rules/master/hob064.rule || echo -e "${RED}[!]${RESET} Get error!"
+  cd ~/
+fi
 
 # magic wormhole
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing magic wormhole"
 apt-get -qq -y install magic-wormhole >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # bloodhound
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing bloodhound"
-apt-get -qq -y install apt-transport-https >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-wget -q --show-progress -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add -
-echo 'deb https://debian.neo4j.org/repo stable/' | sudo tee /etc/apt/sources.list.d/neo4j.list
-apt-get -qq update
-apt-get -qq -y install neo4j >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-cd ~/
-git clone -q https://github.com/adaptivethreat/Bloodhound
-# THIS SEEMS OK
+if [ -e ~/Bloodhound ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} bloodhound installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing bloodhound"
+  apt-get -qq -y install apt-transport-https >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  wget -q --show-progress -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add -
+  echo 'deb https://debian.neo4j.org/repo stable/' | sudo tee /etc/apt/sources.list.d/neo4j.list
+  apt-get -qq update
+  apt-get -qq -y install neo4j >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  cd ~/
+  git clone -q https://github.com/adaptivethreat/Bloodhound
+  # THIS SEEMS OK
+fi
 
 #docker :rolleyes: adsfasdfsadf this is very ugly
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing docker.. hold on tight"
-echo 'deb http://http.debian.net/debian jessie-backports main' > /etc/apt/sources.list.d/backports.list && apt-get -qq update
-apt-get -qq -y install apt-transport-https ca-certificates >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-echo 'deb https://apt.dockerproject.org/repo debian-jessie main' > /etc/apt/sources.list.d/docker.list && apt-get -qq update
-apt-get -qq -y install docker-engine docker >> ~/installLog.log && service docker start || echo -e "${RED}[!]${RESET} Install error!"
+if [ -e /etc/apt/sources.list.d/docker.list ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} docker installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing docker.. hold on tight"
+  echo 'deb http://http.debian.net/debian jessie-backports main' > /etc/apt/sources.list.d/backports.list && apt-get -qq update
+  apt-get -qq -y install apt-transport-https ca-certificates >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+  echo 'deb https://apt.dockerproject.org/repo debian-jessie main' > /etc/apt/sources.list.d/docker.list && apt-get -qq update
+  apt-get -qq -y install docker-engine docker >> ~/installLog.log && service docker start || echo -e "${RED}[!]${RESET} Install error!"
+fi
 
 # voltron
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing voltron"
@@ -325,70 +366,100 @@ echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing exiftool"
 apt-get -q -y install exiftool >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # golang
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing golang, and setting up environment in homedir/golang"
-apt-get -qq -y install golang >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-cd ~/
-mkdir golang
-export GOPATH=~/golang/
-export PATH=$PATH:$GOPATH/bin
-echo "export GOPATH=~/golang/" >> .bashrc
-echo "export PATH=$PATH:$GOPATH/bin" >> .bashrc
+if [ -e ~/golang ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} golang installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing golang, and setting up environment in homedir/golang"
+  apt-get -qq -y install golang >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  cd ~/
+  mkdir golang
+  export GOPATH=~/golang
+  export PATH=$PATH:$GOPATH/bin
+  echo "export GOPATH=~/golang" >> .bashrc
+  echo "export PATH=$PATH:$GOPATH/bin" >> .bashrc
+fi
 
 # glugger
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing glugger"
-cd ~/
-go get github.com/zxsecurity/glugger >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+if [ -e /root/golang/bin/gluggerl ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} glugger installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing glugger"
+  cd ~/
+  go get github.com/zxsecurity/glugger >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+fi
 
 # atom
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing atom (the best text editor)"
-cd ~/Downloads
-apt-get -qq -y install gvfs-bin >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-wget -q --show-progress https://github.com/atom/atom/releases/download/$(curl -s https://github.com/atom/atom/releases/latest | cut -d / -f 8 - | cut -d \" -f 1 -)/atom-amd64.deb
-dpkg --install atom-amd64.deb >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-rm atom-amd64.deb
-cd ~/
+if [ -e /usr/bin/atom ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} atom installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing atom (the best text editor)"
+  cd ~/Downloads
+  apt-get -qq -y install gvfs-bin >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  wget -q --show-progress https://github.com/atom/atom/releases/download/$(curl -s https://github.com/atom/atom/releases/latest | cut -d / -f 8 - | cut -d \" -f 1 -)/atom-amd64.deb
+  dpkg --install atom-amd64.deb >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  rm atom-amd64.deb
+  cd ~/
+fi
 
 # sublime (latest release is 2016, whatever)
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing sublime (the inferior text editor)"
-cd ~/Downloads
-wget -q --show-progress https://download.sublimetext.com/sublime-text_build-3126_amd64.deb
-dpkg --install sublime-text_build-3126_amd64.deb >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-rm sublime-text_build-3126_amd64.deb
-cd ~/
+if [ -e /usr/bin/subl ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} sublime installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing sublime (the inferior text editor)"
+  cd ~/Downloads
+  wget -q --show-progress https://download.sublimetext.com/sublime-text_build-3126_amd64.deb
+  dpkg --install sublime-text_build-3126_amd64.deb >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  rm sublime-text_build-3126_amd64.deb
+  cd ~/
+fi
 
 # privesc
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Getting privesc scripts, storing in homedir/Privesc"
-mkdir Privesc
-cd Privesc
-mkdir Linux
-cd Linux
-wget -q --show-progress https://www.securitysift.com/download/linuxprivchecker.py
-git clone -q https://github.com/rebootuser/LinEnum.git >> ~/installLog.log
-git clone -q https://github.com/PenturaLabs/Linux_Exploit_Suggester.git >> ~/installLog.log
-git clone -q https://github.com/pentestmonkey/unix-privesc-check.git >> ~/installLog.log
-cd ..
-mkdir Windows
-cd Windows
-git clone -q https://github.com/pentestmonkey/windows-privesc-check.git >> ~/installLog.log
-git clone -q https://github.com/GDSSecurity/Windows-Exploit-Suggester.git >> ~/installLog.log
-cd ~/
+if [ -e ~/Privesc ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} privesc scripts installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Getting privesc scripts, storing in homedir/Privesc"
+  cd ~/
+  mkdir Privesc
+  cd Privesc
+  mkdir Linux
+  cd Linux
+  wget -q --show-progress https://www.securitysift.com/download/linuxprivchecker.py
+  git clone -q https://github.com/rebootuser/LinEnum.git >> ~/installLog.log
+  git clone -q https://github.com/fozzysac/linuxprivesc >> ~/installLog.log && python ./linuxprivesc/setup.py install && rm -rf linuxprivesc
+  git clone -q https://github.com/PenturaLabs/Linux_Exploit_Suggester.git >> ~/installLog.log
+  git clone -q https://github.com/pentestmonkey/unix-privesc-check.git >> ~/installLog.log
+  cd ..
+  mkdir Windows
+  cd Windows
+  git clone -q https://github.com/pentestmonkey/windows-privesc-check.git >> ~/installLog.log
+  git clone -q https://github.com/GDSSecurity/Windows-Exploit-Suggester.git >> ~/installLog.log
+  cd ~/
+fi
 
 # sublist3r
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing sublist3r"
-cd /opt/
-git clone -q https://github.com/aboul3la/Sublist3r.git >> ~/installLog.log
-ln -s /opt/Sublist3r/sublist3r.py /usr/local/bin/sublist3r
-chmod +x /opt/Sublist3r/sublist3r.py
-cd ~/
+if [ -e /usr/local/bin/sublist3r ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} sublist3r installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing sublist3r"
+  cd /opt/
+  git clone -q https://github.com/aboul3la/Sublist3r.git >> ~/installLog.log
+  ln -s /opt/Sublist3r/sublist3r.py /usr/local/bin/sublist3r
+  chmod +x /opt/Sublist3r/sublist3r.py
+  cd ~/
+fi
 
 # gittools
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing gittools (gitdumper, gitextractor, gitfinder)"
-cd /opt/
-git clone -q https://github.com/internetwache/GitTools.git >> ~/installLog.log
-ln -s /opt/GitTools/Dumper/gitdumper.sh /usr/local/bin/gitdumper
-ln -s /opt/GitTools/Extractor/extractor.sh /usr/local/bin/gitextractor
-ln -s /opt/GitTools/Finder/gitfinder.sh /usr/local/bin/gitfinder
-cd ~/
+if [ -e /usr/local/bin/gitdumper ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} gittools installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing gittools (gitdumper, gitextractor, gitfinder)"
+  cd /opt/
+  git clone -q https://github.com/internetwache/GitTools.git >> ~/installLog.log
+  ln -s /opt/GitTools/Dumper/gitdumper.sh /usr/local/bin/gitdumper
+  ln -s /opt/GitTools/Extractor/extractor.sh /usr/local/bin/gitextractor
+  ln -s /opt/GitTools/Finder/gitfinder.sh /usr/local/bin/gitfinder
+  cd ~/
+fi
 
 # do the right extraction (dtrx)
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing dtrx"
@@ -399,33 +470,45 @@ echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing node (lol)"
 apt-get -qq -y install npm nodejs >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # vlan hopper (frogger)
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing frogger/vlan hopper (use as frogger)"
-cd /opt/
-git clone -q https://github.com/nccgroup/vlan-hopping.git >> ~/installLog.log
-chmod +x vlan-hopping/frogger.sh
-ln -s /opt/vlan-hopping/frogger.sh /usr/local/bin/frogger
+if [ -e /usr/local/bin/frogger ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} frogger installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing frogger/vlan hopper (use as frogger)"
+  cd /opt/
+  git clone -q https://github.com/nccgroup/vlan-hopping.git >> ~/installLog.log
+  chmod +x vlan-hopping/frogger.sh
+  ln -s /opt/vlan-hopping/frogger.sh /usr/local/bin/frogger
+fi
 
 # fastcoll
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing fastcoll (the good one)"
-cd /opt/
-git clone -q https://github.com/upbit/clone-fastcoll.git >> ~/installLog.log
-cd clone-fastcoll
-make -s >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-ln -s /opt/clone-fastcoll/fastcoll /usr/local/bin/fastcoll
-cd ~/
+if [ -e /usr/local/bin/fastcoll ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} fastcoll installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing fastcoll (the good one)"
+  cd /opt/
+  git clone -q https://github.com/upbit/clone-fastcoll.git >> ~/installLog.log
+  cd clone-fastcoll
+  make -s >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  ln -s /opt/clone-fastcoll/fastcoll /usr/local/bin/fastcoll
+  cd ~/
+fi
 
 # figlet
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing figlet"
 apt-get -qq -y install figlet >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # dnscat2
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing dnscat2"
-cd /opt/
-git clone -q https://github.com/iagox86/dnscat2.git >> ~/installLog.log
-cd dnscat2/client/
-make -s &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-ln -s $(pwd)/dnscat /usr/local/bin/dnscat
-cd ~/
+if [ -e /usr/local/bin/dnscat ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} dnscat installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing dnscat2"
+  cd /opt/
+  git clone -q https://github.com/iagox86/dnscat2.git >> ~/installLog.log
+  cd dnscat2/client/
+  make -s &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  ln -s $(pwd)/dnscat /usr/local/bin/dnscat
+  cd ~/
+fi
 
 # factordb
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing factordb cli"
@@ -436,24 +519,32 @@ echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing tcpxtract"
 apt-get install tcpxtract >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # RSACtfTool (needs libnum and gmpy)
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing RSACtfTool"
-pip -q install gmpy >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-cd /opt/
-git clone -q https://github.com/hellman/libnum.git >> ~/installLog.log
-cd libnum
-python setup.py install >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-cd /opt/
-git clone -q https://github.com/Ganapati/RsaCtfTool.git >> ~/installLog.log
-ln -s /opt/RsaCtfTool/RsaCtfTool.py /usr/local/bin/rsactftool
-cd ~/
+if [ -e /usr/local/bin/rsactftool ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} rsactftool installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing RSACtfTool"
+  pip -q install gmpy >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  cd /opt/
+  git clone -q https://github.com/hellman/libnum.git >> ~/installLog.log
+  cd libnum
+  python setup.py install >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  cd /opt/
+  git clone -q https://github.com/Ganapati/RsaCtfTool.git >> ~/installLog.log
+  ln -s /opt/RsaCtfTool/RsaCtfTool.py /usr/local/bin/rsactftool
+  cd ~/
+fi
 
 # sysinternals
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Getting sysinternals suite, storing with other windows binaries"
-cd /usr/share/windows-binaries
-wget -q --show-progress https://download.sysinternals.com/files/SysinternalsSuite.zip
-dtrx -n SysinternalsSuite.zip
-rm SysinternalsSuite.zip
-cd ~/
+if [ -e /usr/share/windows-binaries/SysinternalsSuite ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} sysinternals installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Getting sysinternals suite, storing with other windows binaries"
+  cd /usr/share/windows-binaries
+  wget -q --show-progress https://download.sysinternals.com/files/SysinternalsSuite.zip
+  dtrx -n SysinternalsSuite.zip
+  rm SysinternalsSuite.zip
+  cd ~/
+fi
 
 # sage
 # we don't want to re-install if it's already installed, 1.2gb download is kinda brutal

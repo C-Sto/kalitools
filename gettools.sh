@@ -263,7 +263,11 @@ else
   cd setup
   echo | bash install.sh &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
   cd ~/
-  ln -s /opt/Empire/empire /usr/local/bin/empire
+  cat > /usr/local/bin/empire << EOF
+#!/bin/bash
+cd /opt/Empire && ./empire
+EOF
+  chmod +x /usr/local/bin/empire
 fi
 
 # hob0rules

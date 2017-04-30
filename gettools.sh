@@ -253,8 +253,18 @@ echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing bless"
 apt-get -qq -y install bless >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # empire
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing empire"
-apt-get -qq -y install empire >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+if [ -e /usr/local/bin/empire ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} Empire installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing Empire"
+  cd /opt/
+  git clone https://github.com/EmpireProject/Empire.git &> ~/installLog.log
+  cd Empire
+  cd setup
+  echo | bash install.sh &> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+  cd ~/
+  ln -s /opt/Empire/empire /usr/local/bin/empire
+fi
 
 # hob0rules
 if [ -e ~/hob0rules ]; then
@@ -425,7 +435,7 @@ else
   cd Linux
   wget -q --show-progress https://www.securitysift.com/download/linuxprivchecker.py
   git clone -q https://github.com/rebootuser/LinEnum.git >> ~/installLog.log
-  git clone -q https://github.com/fozzysac/linuxprivesc >> ~/installLog.log && python ./linuxprivesc/setup.py install && rm -rf linuxprivesc
+  git clone -q https://github.com/fozzysac/linuxprivesc >> ~/installLog.log && python ./linuxprivesc/setup.py install
   git clone -q https://github.com/PenturaLabs/Linux_Exploit_Suggester.git >> ~/installLog.log
   git clone -q https://github.com/pentestmonkey/unix-privesc-check.git >> ~/installLog.log
   cd ..

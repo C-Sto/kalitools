@@ -242,7 +242,9 @@ fi
 # thefuck
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing thefuck"
 apt-get -qq -y install python3-dev python3-pip >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-pip -q install --user thefuck >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+pip3 -q install --user thefuck >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+echo "eval $(thefuck --alias)" >> ~/.bashrc
+source ~/.bashrc
 
 # bro
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing bro"

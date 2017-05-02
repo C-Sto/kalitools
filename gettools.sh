@@ -332,7 +332,7 @@ apt-get -qq -y purge wireshark-common radare2 valabind >> ~/installLog.log || ec
 echo -e "$(date '+%X') ${BLUE}BLOCKING ${GREEN}[+]${RESET} Apt thingsing.."
 apt-get -qq -y install dtrx nodejs figlet tcpxtract golang gvfs-bin libini-config-dev python3-dev python3-pip bro \
 python2.7 python-pip python-dev git libssl-dev valac libvala-0.34-dev swig \
-cowsay cypher-shell irssi lynx beef afl gimp masscan unicornscan audacity responder sshuttle exiftool \
+cowsay irssi lynx beef afl gimp masscan unicornscan audacity responder sshuttle exiftool \
 bless magic-wormhole apt-transport-https qemu-system-arm ltrace yara voltron \
 libffi-dev build-essential cmatrix apktool qemu qemu-kvm qemu-system  \
 qemu-system-common qemu-system-mips qemu-system-ppc qemu-system-sparc \
@@ -428,12 +428,11 @@ if [ -e ~/Bloodhound ]; then
   echo "$(date '+%X') ${YELLOW}[+]${RESET} bloodhound installed already"
 else
   echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing bloodhound"
-  wget -q -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add -
-  echo 'deb https://debian.neo4j.org/repo stable/' | sudo tee /etc/apt/sources.list.d/neo4j.list
-  apt-get -qq update
-  apt-get -qq -y install neo4j >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!" 2> error25.log
-  cd ~/
-  git clone -q https://github.com/adaptivethreat/Bloodhound
+  npm install -g electron-packager
+  git clone https://github.com/adaptivethreat/Bloodhound
+  cd Bloodhound
+  npm install
+  npm run linuxbuild
   # THIS SEEMS OK
 fi
 
@@ -452,7 +451,7 @@ fi
 #angr (must come after docker )
 echo -e $(
 if [ -e /usr/local/bin/angr ]; then
-  echo "$(date '+%X') ${YELLOW}[+]${RESET} Sage installed already"
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} angr installed already"
 else
   echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing angr..."
   docker run -it angr/angr

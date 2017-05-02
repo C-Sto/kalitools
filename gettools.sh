@@ -313,7 +313,7 @@ else
   apt-get -qq -y install apt-transport-https ca-certificates >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
   apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
   echo 'deb https://apt.dockerproject.org/repo debian-jessie main' > /etc/apt/sources.list.d/docker.list && apt-get -qq update
-  apt-get -qq -y install docker-engine docker >> ~/installLog.log && service docker start || echo -e "${RED}[!]${RESET} Install error!"
+  apt-get -qq --allow-unauthenticated -y install docker-engine docker >> ~/installLog.log && service docker start || echo -e "${RED}[!]${RESET} Install error!"
 fi
 
 # voltron
@@ -532,7 +532,7 @@ pip install factordb-pycli >> ~/installLog.log || echo -e "${RED}[!]${RESET} Ins
 
 # tcpxtract
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing tcpxtract"
-apt-get install tcpxtract >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+apt-get -qq -y install tcpxtract >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
 
 # RSACtfTool (needs libnum and gmpy)
 if [ -e /usr/local/bin/rsactftool ]; then
@@ -573,6 +573,22 @@ else
   mv SageMath/ /opt/
   rm sage*
   ln -s /opt/SageMath/sage /usr/local/bin/sage
+fi
+
+# dnsmasq
+apt -qq -y install dnsmasq >> ~/installLog.log
+
+#angr
+if [ -e /usr/local/bin/angr ]; then
+  echo "$(date '+%X') ${YELLOW}[+]${RESET} Sage installed already"
+else
+  echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing angr..."
+  docker run -it angr/angr
+  cat > /usr/local/bin/angr << EOF
+  #!/bin/bash
+  docker run -it angr/angr
+  EOF
+  chmod +x /usr/local/bin/angr
 fi
 
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Upgrading any leftovers.."

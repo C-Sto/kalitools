@@ -10,6 +10,8 @@ RESET="\033[00m"       # Normal
 # Fix display (also from gotmilks install script)
 export DISPLAY=:0.0
 export TERM=xterm
+# Make headless for automated goodness
+export DEBIAN_FRONTEND=noninteractive
 
 ##### Read command line arguments (based on the gotmilk install script)
 while [[ "${#}" -gt 0 && ."${1}" == .-* ]]; do

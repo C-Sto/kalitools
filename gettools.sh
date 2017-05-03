@@ -485,7 +485,8 @@ apt-get -qq -y install dtrx >> ~/installLog.log || echo -e "${RED}[!]${RESET} In
 
 # node
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing node (lol)"
-apt-get -qq -y install npm nodejs >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
+curl -sL https://deb.nodesource.com/setup_7.x | bash -
+apt-get -qq install -y nodejs >> ~/installLog.log || echo -e "${RED}[!]${RESET} Node Install error!"
 
 # vlan hopper (frogger)
 if [ -e /usr/local/bin/frogger ]; then

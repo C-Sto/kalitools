@@ -71,11 +71,11 @@ pip -q install --upgrade pip >> ~/installLog.log || echo -e "${RED}[!]${RESET} p
 
 # wireshark sux
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Removing, then installing wireshark again, to avoid segfault things"
-apt-get -qq -y purge wireshark-common >> ~/installLog.log || echo -e "${RED}[!]${RESET} Uninstall error!"
+apt-get -qq -y purge wireshark-common >> ~/installLog.log && apt-get -qq -y install wireshark || echo -e "${RED}[!]${RESET} Wireshark uninstall error!"
 
 #32 bit headers, snort and wireshark - interactive,  asdfasdfasfd WHY ISNT THIS IN BY DEFAULT?!!?
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing x86 support, and wireshark (noisy, requires user input)"
-apt-get -qq -y install lib32stdc++6 libc6-i386 wireshark || echo -e "${RED}[!]${RESET} Install error!"
+echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing x86 support"
+apt-get -qq -y install lib32stdc++6 libc6-i386 >> ~/installLog.log || echo -e "${RED}[!]${RESET} Headers Install error!"
 
 # exfat for usb's
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing exfat-fuse"
@@ -154,11 +154,10 @@ if [ -e /opt/esptool ]; then
   echo "$(date '+%X') ${YELLOW}[+]${RESET} cyberchef installed already"
 else
   echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing esptool"
-  #apt-get -qq -y install esptool >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
   cd /opt/
-  git clone https://github.com/espressif/esptool.git
+  git clone https://github.com/espressif/esptool.git >> ~/installLog.log
   cd esptool
-  python setup.py install
+  python setup.py install >> ~/installLog.log || echo -e "${RED}[!]${RESET} ESPTool install error!"
 fi
 
 # espeak
@@ -565,7 +564,7 @@ fi
 
 # sage
 # we don't want to re-install if it's already installed, 1.2gb download is kinda brutal
-if [ -e /usr/bin ]; then #[ -e /usr/local/bin/sage ]; then
+if [ -e /usr/local/bin/sage ]; then
   echo "$(date '+%X') ${YELLOW}[+]${RESET} Sage installed already"
 else
   echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing sage... this may take a while!"

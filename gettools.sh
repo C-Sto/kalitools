@@ -296,13 +296,11 @@ if [ -e ~/Bloodhound ]; then
   echo "$(date '+%X') ${YELLOW}[+]${RESET} bloodhound installed already"
 else
   echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing bloodhound"
-  apt-get -qq -y install apt-transport-https >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-  wget -q --show-progress -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add -
-  echo 'deb https://debian.neo4j.org/repo stable/' | sudo tee /etc/apt/sources.list.d/neo4j.list
-  apt-get -qq update
-  apt-get -qq -y install neo4j >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-  cd ~/
-  git clone -q https://github.com/adaptivethreat/Bloodhound
+  npm install -g electron-packager
+  git clone https://github.com/adaptivethreat/Bloodhound
+  cd Bloodhound
+  npm install
+  npm run linuxbuild
   # THIS SEEMS OK
 fi
 
@@ -567,7 +565,7 @@ fi
 
 # sage
 # we don't want to re-install if it's already installed, 1.2gb download is kinda brutal
-if [ -e /usr/usr/local/bin/sage ]; then
+if [ -e /usr/bin ]; then #[ -e /usr/local/bin/sage ]; then
   echo "$(date '+%X') ${YELLOW}[+]${RESET} Sage installed already"
 else
   echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing sage... this may take a while!"
@@ -579,7 +577,7 @@ else
 fi
 
 # dnsmasq
-apt -qq -y install dnsmasq >> ~/installLog.log
+apt-get -qq -y install dnsmasq >> ~/installLog.log
 
 #angr
 if [ -e /usr/local/bin/angr ]; then
@@ -588,9 +586,9 @@ else
   echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing angr..."
   docker run -it angr/angr
   cat > /usr/local/bin/angr << EOF
-  #!/bin/bash
-  docker run -it angr/angr
-  EOF
+#!/bin/bash
+docker run -it angr/angr
+EOF
   chmod +x /usr/local/bin/angr
 fi
 

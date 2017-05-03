@@ -584,7 +584,7 @@ if [ -e /usr/local/bin/angr ]; then
   echo "$(date '+%X') ${YELLOW}[+]${RESET} Sage installed already"
 else
   echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing angr..."
-  docker run -it angr/angr
+  docker pull angr/angr
   cat > /usr/local/bin/angr << EOF
 #!/bin/bash
 docker run -it angr/angr

@@ -69,9 +69,14 @@ apt-get update || echo -e "${RED}[!]${RESET} apt update error!"
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Upgrading pip"
 pip -q install --upgrade pip >> ~/installLog.log || echo -e "${RED}[!]${RESET} pip update error!"
 
+# node
+echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing node (lol)"
+curl -sL https://deb.nodesource.com/setup_7.x | bash -
+apt-get -qq install -y nodejs >> ~/installLog.log || echo -e "${RED}[!]${RESET} Node Install error!"
+
 # wireshark sux
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Removing, then installing wireshark again, to avoid segfault things"
-apt-get -qq -y purge wireshark-common >> ~/installLog.log && apt-get -qq -y install wireshark || echo -e "${RED}[!]${RESET} Wireshark uninstall error!"
+apt-get -qq -y purge wireshark-common >> ~/installLog.log && apt-get -qq -y install wireshark >> ~/installLog.log || echo -e "${RED}[!]${RESET} Wireshark uninstall error!"
 
 #32 bit headers, snort and wireshark - interactive,  asdfasdfasfd WHY ISNT THIS IN BY DEFAULT?!!?
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing x86 support"
@@ -155,7 +160,7 @@ if [ -e /opt/esptool ]; then
 else
   echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing esptool"
   cd /opt/
-  git clone https://github.com/espressif/esptool.git >> ~/installLog.log
+  git clone -q https://github.com/espressif/esptool.git >> ~/installLog.log
   cd esptool
   python setup.py install >> ~/installLog.log || echo -e "${RED}[!]${RESET} ESPTool install error!"
 fi
@@ -295,11 +300,11 @@ if [ -e ~/Bloodhound ]; then
   echo "$(date '+%X') ${YELLOW}[+]${RESET} bloodhound installed already"
 else
   echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing bloodhound"
-  npm install -g electron-packager
+  npm install -g electron-packager || echo -e "${RED}[!]${RESET} electron-packager Install error!"
   git clone https://github.com/adaptivethreat/Bloodhound
   cd Bloodhound
-  npm install
-  npm run linuxbuild
+  npm install || echo -e "${RED}[!]${RESET} Bloodhound install error!"
+  npm run linuxbuild || echo -e "${RED}[!]${RESET} Bloodhound build error!"
   # THIS SEEMS OK
 fi
 
@@ -479,11 +484,6 @@ fi
 # do the right extraction (dtrx)
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing dtrx"
 apt-get -qq -y install dtrx >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-
-# node
-echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing node (lol)"
-curl -sL https://deb.nodesource.com/setup_7.x | bash -
-apt-get -qq install -y nodejs >> ~/installLog.log || echo -e "${RED}[!]${RESET} Node Install error!"
 
 # vlan hopper (frogger)
 if [ -e /usr/local/bin/frogger ]; then

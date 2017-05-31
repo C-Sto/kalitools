@@ -75,7 +75,7 @@ pip -q install --upgrade pip >> ~/installLog.log || echo -e "${RED}[!]${RESET} p
 
 # node
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing node (lol)"
-curl -sL https://deb.nodesource.com/setup_7.x | bash -
+curl -sL https://deb.nodesource.com/setup_7.x | bash - >> ~/installLog.log
 apt-get -qq install -y nodejs >> ~/installLog.log || echo -e "${RED}[!]${RESET} Node Install error!"
 
 # wireshark sux
@@ -317,11 +317,16 @@ if [ -e /etc/apt/sources.list.d/docker.list ]; then
   echo "$(date '+%X') ${YELLOW}[+]${RESET} docker installed already"
 else
   echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing docker.. hold on tight"
-  echo 'deb http://http.debian.net/debian jessie-backports main' > /etc/apt/sources.list.d/backports.list && apt-get -qq update
-  apt-get -qq -y install apt-transport-https ca-certificates >> ~/installLog.log || echo -e "${RED}[!]${RESET} Install error!"
-  apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-  echo 'deb https://apt.dockerproject.org/repo debian-jessie main' > /etc/apt/sources.list.d/docker.list && apt-get -qq update
-  apt-get -qq --allow-unauthenticated -y install docker-engine docker >> ~/installLog.log && service docker start || echo -e "${RED}[!]${RESET} Install error!"
+  apt-get -qq -y install apt-transport-https \
+      ca-certificates software-properties-common \
+      curl apt-transport-https >> ~/installLog.log
+  sudo echo \
+    "deb [arch=amd64] \
+    https://download.docker.com/linux/debian \
+    stretch stable" > \
+    /etc/apt/sources.list.d/docker.list >> ~/installLog.log || echo -e "${RED}[!]${RESET} Docker install error!"
+  apt-get update >> ~/installLog.log || echo -e "${RED}[!]${RESET} Docker install error!"
+  apt-get -qq -y install docker-ce >> ~/installLog.log && service docker start  || echo -e "${RED}[!]${RESET} Docker install error!"
 fi
 
 # voltron

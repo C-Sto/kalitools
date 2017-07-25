@@ -166,7 +166,7 @@ else
   cd /opt/
   git clone -q https://github.com/espressif/esptool.git >> ~/installLog.log
   cd esptool
-  python setup.py install >> ~/installLog.log || echo -e "${RED}[!]${RESET} ESPTool install error!"
+  python setup.py install >> ~/installLog.log 2>>installLog.log || echo -e "${RED}[!]${RESET} ESPTool install error!"
 fi
 
 # espeak
@@ -603,7 +603,8 @@ EOF
 fi
 
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} Upgrading any leftovers.."
-apt-get -qq -y upgrade || echo -e "${RED}[!]${RESET} Upgrade error!"
+echo "[+] Upgrading leftovers" >> ~/installLog.log
+apt-get -qq -y upgrade  >> ~/installLog.log || echo -e "${RED}[!]${RESET} Upgrade error!"
 
 # apt-get autogoodcleanremove
 echo -e "$(date '+%X') ${GREEN}[+]${RESET} autoremoving, autocleaning, rebooting"

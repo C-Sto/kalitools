@@ -304,11 +304,11 @@ if [ -e ~/Bloodhound ]; then
   echo "$(date '+%X') ${YELLOW}[+]${RESET} bloodhound installed already"
 else
   echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing bloodhound"
-  npm install -g electron-packager || echo -e "${RED}[!]${RESET} electron-packager Install error!"
+  npm install -g electron-packager >> ~/installLog.log || echo -e "${RED}[!]${RESET} electron-packager Install error!"
   git clone https://github.com/adaptivethreat/Bloodhound
   cd Bloodhound
-  npm install || echo -e "${RED}[!]${RESET} Bloodhound install error!"
-  npm run linuxbuild || echo -e "${RED}[!]${RESET} Bloodhound build error!"
+  npm install >> ~/installLog.log || echo -e "${RED}[!]${RESET} Bloodhound install error!"
+  npm run linuxbuild >> ~/installLog.log || echo -e "${RED}[!]${RESET} Bloodhound build error!"
   # THIS SEEMS OK
 fi
 
@@ -319,13 +319,13 @@ else
   echo -e "$(date '+%X') ${GREEN}[+]${RESET} Installing docker.. hold on tight"
   apt-get -qq -y install apt-transport-https \
       ca-certificates software-properties-common \
-      curl apt-transport-https >> ~/installLog.log
+      curl apt-transport-https >> ~/installLog.log || echo -e "${RED}[!]${RESET} docker deps Install error!"
   sudo echo \
     "deb [arch=amd64] \
     https://download.docker.com/linux/debian \
     stretch stable" > \
-    /etc/apt/sources.list.d/docker.list >> ~/installLog.log || echo -e "${RED}[!]${RESET} Docker install error!"
-  apt-get update >> ~/installLog.log || echo -e "${RED}[!]${RESET} Docker install error!"
+    /etc/apt/sources.list.d/docker.list 
+  apt-get update >> ~/installLog.log || echo -e "${RED}[!]${RESET} Docker update install error!"
   apt-get -qq -y install docker-ce >> ~/installLog.log && service docker start  || echo -e "${RED}[!]${RESET} Docker install error!"
 fi
 
